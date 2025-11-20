@@ -36,6 +36,10 @@
                     <p>Xem bảng xếp hạng các đội đua</p>
                 </a>
             </div>
+
+            <div class="button-group">
+                <a href="../login.jsp" class="back-button">Đăng xuất</a>
+            </div>
         </div>
         <%
             }
