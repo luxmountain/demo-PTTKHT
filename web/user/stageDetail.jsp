@@ -4,7 +4,7 @@
     Author     : ADMIN
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8" import="java.text.*, dao.*, model.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="java.text.*, java.util.*, dao.*, model.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -39,6 +39,11 @@
             Stage stage = stageDAO.getStageInfo(stageId);
             
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            
+            // Load registers & results for this stage
+            ResultDAO resultDAO = new ResultDAO();
+            List<Register> registers = resultDAO.getRegistersByStage(stageId);
         %>
         
         <div class="container">
@@ -93,7 +98,7 @@
                     
                     <div class="detail-row">
                         <span class="detail-label">Number of drivers:</span>
-                        <span class="detail-value">0</span>
+                        <span class="detail-value"><%= registers != null ? registers.size() : 0 %></span>
                     </div>
                     
                     <div class="detail-row">
@@ -117,9 +122,28 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <%
+                            if (registers == null || registers.isEmpty()) {
+                        %>
                         <tr>
                             <td colspan="4" style="text-align: center; color: #999;">No results available</td>
                         </tr>
+                        <%
+                            } else {
+                                for (int i = 0; i < registers.size(); i++) {
+                                    Register reg = registers.get(i);
+                                    Result r = reg.getResult();
+                        %>
+                        <tr>
+                            <td><%= (i + 1) %></td>
+                            <td><%= reg.getRacerName() != null ? reg.getRacerName() : "N/A" %></td>
+                            <td><%= reg.getTeamName() != null ? reg.getTeamName() : "N/A" %></td>
+                            <td><%= (r != null && r.getTimedone() != null ? timeFormat.format(r.getTimedone()) : "N/A") %></td>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
                     </tbody>
                 </table>
             <%

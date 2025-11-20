@@ -37,7 +37,7 @@ public class ResultDAO extends DAO {
                 + "INNER JOIN tblmember m ON ra.tblMemberid = m.id "
                 + "INNER JOIN tblteam t ON c.tblTeamid = t.id "
                 + "WHERE r.tblStageid = ? "
-                + "ORDER BY COALESCE(r.position, 999), m.name";
+                + "ORDER BY CASE WHEN r.timedone IS NULL THEN 1 ELSE 0 END, r.timedone, m.name";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
