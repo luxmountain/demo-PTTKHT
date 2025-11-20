@@ -6,24 +6,40 @@
         <title>Login</title>
     </head>
     <body>
-        <%
-            if (request.getParameter("error") != null && request.getParameter("error").equalsIgnoreCase("timeout")) {
-        %>
-                <h4>Session timed out. Please log in again.</h4>
-        <%
-            } else if (request.getParameter("error") != null && request.getParameter("error").equalsIgnoreCase("failed")) {
-        %>
-                <h4>Login failed. Please check your username and password.</h4>
-        <%
-            }
-        %>
-        <h1>Login</h1>
-        <form action="doLogin.jsp" method="post" name="loginForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required><br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br><br>
-            <input type="submit" value="Login">
-        </form>
+        <div class="login-container">
+            <h1>Login</h1>
+            
+            <%
+                if (request.getParameter("error") != null && request.getParameter("error").equalsIgnoreCase("timeout")) {
+            %>
+                    <div class="error-message">Session timed out. Please log in again.</div>
+            <%
+                } else if (request.getParameter("error") != null && request.getParameter("error").equalsIgnoreCase("failed")) {
+            %>
+                    <div class="error-message">Login failed. Please check your username and password.</div>
+            <%
+                } else if (request.getParameter("err") != null) {
+            %>
+                    <div class="error-message">Session timeout. Please login again.</div>
+            <%
+                }
+            %>
+            
+            <form action="doLogin.jsp" method="post" name="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <div class="button-group">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+        </div>
     </body>
 </html>

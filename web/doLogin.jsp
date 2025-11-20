@@ -15,21 +15,21 @@
     member.setPassword(password);
 
     MemberDAO memberDAO = new MemberDAO();
-    boolean result = memberDAO.checkLogin(member);
+    Member authenticatedMember = memberDAO.checkLogin(member);
 
-    if (result) {
+    if (authenticatedMember != null) {
         if (session != null) {
             session.invalidate();
             session = request.getSession(true);
         }
 
-        String role = member.getRole();
+        String role = authenticatedMember.getRole();
 
         if ("ADMIN".equals(role)) {
-            session.setAttribute("admin", member);
+            session.setAttribute("admin", authenticatedMember);
             response.sendRedirect("admin/adminHome.jsp");
         } else if ("USER".equals(role)) {
-            session.setAttribute("user", member);
+            session.setAttribute("user", authenticatedMember);
             response.sendRedirect("user/userHome.jsp");
         } else {
             response.sendRedirect("login.jsp?error=failed");

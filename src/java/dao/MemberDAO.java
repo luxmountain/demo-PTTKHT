@@ -10,12 +10,12 @@ public class MemberDAO extends DAO {
         super();
     }
 
-    public boolean checkLogin(Member member) {
-        boolean result = false;
+    public Member checkLogin(Member member) {
+        Member result = null;
 
         if (member.getUsername().contains("true") || member.getUsername().contains("=")
                 || member.getPassword().contains("true") || member.getPassword().contains("=")) {
-            return false;
+            return null;
         }
 
         String sql
@@ -37,16 +37,23 @@ public class MemberDAO extends DAO {
             ResultSet rs = cs.executeQuery();
 
             if (rs.next()) {
-                member.setId(rs.getInt("id"));
-                member.setName(rs.getString("name"));
-                member.setRole(rs.getString("role"));
-                result = true;
+                int memberId = rs.getInt("id");
+                String role = rs.getString("role");
+                
+                // Call appropriate DAO based on role
+                if ("ADMIN".equals(role)) {
+                    AdminDAO adminDAO = new AdminDAO();
+                    result = adminDAO.getAdminInfo(memberId);
+                } else if ("USER".equals(role)) {
+                    UserDAO userDAO = new UserDAO();
+                    result = userDAO.getUserInfo(memberId);
+                }
             }
             rs.close();
             cs.close();
         } catch (Exception e) {
             e.printStackTrace();
-            result = false;
+            result = null;
         }
 
         return result;

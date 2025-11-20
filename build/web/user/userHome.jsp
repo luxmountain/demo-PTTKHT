@@ -18,8 +18,15 @@
                 response.sendRedirect("../login.jsp?err=timeout");
             } else {
         %>
-        <h2>User Home</h2>
-        <p>Welcome, <%= user.getName() %>!</p>
+        <div class="home-container">
+            <h1>Home</h1>
+            
+            <div class="user-info">
+                <strong>Name:</strong> <%= user.getName() %>
+            </div>
+            
+            <a href="searchStage.jsp" class="menu-button">Search Race</a>
+        </div>
         <%
             }
         %>
