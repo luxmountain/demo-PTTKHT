@@ -1,6 +1,6 @@
 <%-- 
-    Document   : userHome
-    Created on : Nov 20, 2025, 10:37:10 AM
+    Document   : adminHome
+    Created on : Nov 20, 2025
     Author     : ADMIN
 --%>
 
@@ -9,17 +9,18 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>User Home</title>
+        <title>Admin Home</title>
     </head>
     <body>
         <%
-            Member user = (Member) session.getAttribute("user");
-            if (user == null) {
+            Member admin = (Member) session.getAttribute("admin");
+            if (admin == null) {
                 response.sendRedirect("../login.jsp?err=timeout");
             } else {
         %>
-        <h2>User Home</h2>
-        <p>Welcome, <%= user.getName() %>!</p>
+        <h2>Admin Home</h2>
+        <p>Welcome, <%= admin.getName() %>!</p>
+        <p>Role: Administrator</p>
         <%
             }
         %>

@@ -13,11 +13,15 @@
     </head>
     <body>
         <%
-            User user = (User) session.getAttribute(Role.USER);
+            Member user = (Member) session.getAttribute("user");
             if (user == null) {
-                response.sendRedirect("login.jsp?err=timeout");
-            }
+                response.sendRedirect("../login.jsp?err=timeout");
+            } else {
         %>
         <h2>User Home</h2>
+        <p>Welcome, <%= user.getName() %>!</p>
+        <%
+            }
+        %>
     </body>
 </html>

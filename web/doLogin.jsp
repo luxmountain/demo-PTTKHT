@@ -25,10 +25,10 @@
 
         String role = member.getRole();
 
-        if (role == "ADMIN") {
+        if ("ADMIN".equals(role)) {
             session.setAttribute("admin", member);
             response.sendRedirect("admin/adminHome.jsp");
-        } else if (role == "USER") {
+        } else if ("USER".equals(role)) {
             session.setAttribute("user", member);
             response.sendRedirect("user/userHome.jsp");
         } else {
