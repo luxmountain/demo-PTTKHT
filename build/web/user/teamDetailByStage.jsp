@@ -62,7 +62,7 @@
         </div>
 
         <div class="section">
-            <h3>Riders and Results</h3>
+            <h3>Racers and Results</h3>
             <%
                 if (racers != null && !racers.isEmpty()) {
                     int totalPoints = 0;
@@ -79,14 +79,14 @@
                 <div class="info-section">
                     <p><strong>Team total points:</strong> <%= totalPoints %> points</p>
                     <p><strong>Best position:</strong> <%= bestPosition %></p>
-                    <p><strong>Number of participating riders:</strong> <%= racers.size() %></p>
+                    <p><strong>Number of participating racers:</strong> <%= racers.size() %></p>
                 </div>
                 
                 <table>
                     <thead>
                         <tr>
                             <th>Shirt No</th>
-                            <th>Rider Name</th>
+                            <th>Racer Name</th>
                             <th>Rank</th>
                             <th>Finish Time</th>
                             <th>Points</th>
@@ -110,7 +110,7 @@
                             <td><%= racer.get("points") %></td>
                             <td>
                                 <a href="racerDetail.jsp?racerId=<%= racer.get("racerId") %>&seasonId=<%= stage.getSeasonId() %>" class="btn">
-                                    View rider details
+                                    View racer details
                                 </a>
                             </td>
                         </tr>
@@ -123,7 +123,7 @@
                 } else {
             %>
                 <div class="message info">
-                    This team has no riders in this stage.
+                    This team has no racers in this stage.
                 </div>
             <%
                 }

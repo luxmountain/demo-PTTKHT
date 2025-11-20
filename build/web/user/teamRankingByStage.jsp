@@ -64,7 +64,7 @@
                         <th>Rank</th>
                         <th>Team Name</th>
                         <th>Country</th>
-                        <th>Riders Participated</th>
+                        <th>Racers Participated</th>
                         <th>Best Position</th>
                         <th>Total Points</th>
                         <th>Status</th>

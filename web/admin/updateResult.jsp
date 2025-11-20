@@ -35,7 +35,7 @@
                     var time = rows[i].querySelector('input[name^="time"]').value;
                     
                     if (position !== '' && time === '') {
-                        alert('Please enter finish time for the rider with position ' + position);
+                        alert('Please enter finish time for the racer with position ' + position);
                         return false;
                     }
                 }
@@ -105,7 +105,7 @@
             
             <% if (registers == null || registers.isEmpty()) { %>
                 <div class="card">
-                    <p style="color: #dc3545;">No riders registered for this stage.</p>
+                    <p style="color: #dc3545;">No racers registered for this stage.</p>
                 </div>
                 <div class="button-group">
                     <a href="stageList.jsp" class="back-button">Back</a>
@@ -118,7 +118,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Rider Name</th>
+                            <th>Racer Name</th>
                             <th>Team</th>
                             <th>Position</th>
                             <th>Finish Time</th>

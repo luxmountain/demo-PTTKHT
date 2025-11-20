@@ -82,7 +82,7 @@
         </div>
 
         <div class="section">
-            <h3>Rider List</h3>
+            <h3>Racer List</h3>
             <%
                 if (racers != null && !racers.isEmpty()) {
             %>
@@ -90,7 +90,7 @@
                     <thead>
                         <tr>
                             <th>Shirt No</th>
-                            <th>Rider Name</th>
+                            <th>Racer Name</th>
                             <th>Nationality</th>
                             <th>Options</th>
                         </tr>
@@ -105,7 +105,7 @@
                             <td><%= racer.get("nationality") %></td>
                             <td>
                                 <a href="racerDetail.jsp?racerId=<%= racer.get("racerId") %>&seasonId=<%= seasonId %>&teamId=<%= teamId %>" class="btn">
-                                    View rider details
+                                    View racer details
                                 </a>
                             </td>
                         </tr>
@@ -118,7 +118,7 @@
                 } else {
             %>
                 <div class="message info">
-                    No riders in this team for the selected season.
+                    No racers in this team for the selected season.
                 </div>
             <%
                 }
