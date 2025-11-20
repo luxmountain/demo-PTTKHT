@@ -96,4 +96,42 @@ public class StageDAO extends DAO {
         
         return stage;
     }
+
+    /**
+     * Get all stages for admin management
+     * @return list of all stages
+     */
+    public List<Stage> getAllStages() {
+        List<Stage> stages = new ArrayList<>();
+        
+        String sql = "SELECT id, name, date, location, description, roadmap, status, tblSeasonid "
+                + "FROM tblstage "
+                + "ORDER BY date DESC";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Stage stage = new Stage();
+                stage.setId(rs.getInt("id"));
+                stage.setName(rs.getString("name"));
+                stage.setDate(rs.getDate("date"));
+                stage.setLocation(rs.getString("location"));
+                stage.setDescription(rs.getString("description"));
+                stage.setRoadmap(rs.getString("roadmap"));
+                stage.setStatus(rs.getBoolean("status"));
+                stage.setSeasonId(rs.getInt("tblSeasonid"));
+                
+                stages.add(stage);
+            }
+            
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return stages;
+    }
 }

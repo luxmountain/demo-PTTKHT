@@ -18,9 +18,22 @@
                 response.sendRedirect("../login.jsp?err=timeout");
             } else {
         %>
-        <h2>Admin Home</h2>
-        <p>Welcome, <%= admin.getName() %>!</p>
-        <p>Role: Administrator</p>
+        <div class="container">
+            <h2>Trang quản trị</h2>
+            
+            <div class="welcome">
+                <p><strong>Xin chào, <%= admin.getName() %>!</strong></p>
+                <p>Vai trò: Quản trị viên</p>
+            </div>
+            
+            <div class="menu">
+                <h3>Chức năng quản lý</h3>
+                <a href="stageList.jsp" class="menu-item">📊 Cập nhật kết quả chặng đua</a>
+                <!-- Add more menu items here as needed -->
+            </div>
+            
+            <a href="../login.jsp" class="logout">Đăng xuất</a>
+        </div>
         <%
             }
         %>

@@ -12,8 +12,15 @@ import java.util.Date;
  */
 public class Register {
     private int id;
-    private boolean status;
     private Date dateRegistered;
+    private boolean status;
+    private int contractId;
+    private int stageId;
+    private Result result;
+    
+    // For display purposes
+    private String racerName;
+    private String teamName;
 
     public int getId() {
         return id;
@@ -21,6 +28,14 @@ public class Register {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Date getDateRegistered() {
+        return dateRegistered;
+    }
+
+    public void setDateRegistered(Date dateRegistered) {
+        this.dateRegistered = dateRegistered;
     }
 
     public boolean isStatus() {
@@ -31,11 +46,43 @@ public class Register {
         this.status = status;
     }
 
-    public Date getDateRegistered() {
-        return dateRegistered;
+    public int getContractId() {
+        return contractId;
     }
 
-    public void setDateRegistered(Date dateRegistered) {
-        this.dateRegistered = dateRegistered;
+    public void setContractId(int contractId) {
+        this.contractId = contractId;
+    }
+
+    public int getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(int stageId) {
+        this.stageId = stageId;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
+    public String getRacerName() {
+        return racerName;
+    }
+
+    public void setRacerName(String racerName) {
+        this.racerName = racerName;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 }

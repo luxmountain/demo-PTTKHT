@@ -4,7 +4,7 @@
  */
 package model;
 
-import java.util.Date;
+import java.sql.Time;
 
 /**
  *
@@ -14,7 +14,7 @@ public class Result {
     private int id;
     private int position;
     private int points;
-    private Date timedone;
+    private Time timedone;
 
     public int getId() {
         return id;
@@ -40,11 +40,11 @@ public class Result {
         this.points = points;
     }
 
-    public Date getTimedone() {
+    public Time getTimedone() {
         return timedone;
     }
 
-    public void setTimedone(Date timedone) {
+    public void setTimedone(Time timedone) {
         this.timedone = timedone;
     }
 }

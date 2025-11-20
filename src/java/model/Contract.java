@@ -16,6 +16,8 @@ public class Contract {
     private Date startdate;
     private Date enddate;
     private boolean status;
+    private int racerId;
+    private int teamId;
 
     public int getId() {
         return id;
@@ -55,5 +57,21 @@ public class Contract {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public int getRacerId() {
+        return racerId;
+    }
+
+    public void setRacerId(int racerId) {
+        this.racerId = racerId;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
     }
 }
