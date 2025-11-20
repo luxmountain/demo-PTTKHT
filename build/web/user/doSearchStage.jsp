@@ -8,7 +8,7 @@
 <%
     Member user = (Member) session.getAttribute("user");
     if (user == null) {
-        response.sendRedirect("../login.jsp?err=timeout");
+        response.sendRedirect("../login.jsp?error=timeout");
         return;
     }
 

@@ -16,7 +16,7 @@
         <%
             Member admin = (Member) session.getAttribute("admin");
             if (admin == null) {
-                response.sendRedirect("../login.jsp?err=timeout");
+                response.sendRedirect("../login.jsp?or=timeout");
                 return;
             }
 

@@ -19,7 +19,7 @@
             %>
                     <div class="error-message">Login failed. Please check your username and password.</div>
             <%
-                } else if (request.getParameter("err") != null) {
+                } else if (request.getParameter("error") != null) {
             %>
                     <div class="error-message">Session timeout. Please login again.</div>
             <%
