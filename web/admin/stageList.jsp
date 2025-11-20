@@ -42,6 +42,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th>Stage Name</th>
                         <th>Date</th>
                         <th>Location</th>
@@ -52,24 +53,26 @@
                 <tbody>
                     <% 
                     if (stages != null && !stages.isEmpty()) {
-                        for (Stage stage : stages) {
+                        for (int i = 0; i < stages.size(); i++) {
+                            Stage stage = stages.get(i);
                             String statusText = "";
                             String statusBadge = "";
                             
                             if (stage.getDate() != null) {
                                 if (stage.getDate().before(today)) {
-                                    statusText = "Đã hoàn thành";
+                                    statusText = "Completed";
                                     statusBadge = "completed";
                                 } else {
-                                    statusText = "Chưa diễn ra";
+                                    statusText = "Upcoming";
                                     statusBadge = "upcoming";
                                 }
                             } else {
-                                statusText = "Chưa xác định";
+                                statusText = "Unknown";
                                 statusBadge = "upcoming";
                             }
                     %>
                     <tr>
+                        <td><%= (i + 1) %></td>
                         <td><%= stage.getName() %></td>
                         <td><%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></td>
                         <td><%= stage.getLocation() %></td>
