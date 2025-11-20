@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Results - Stages</title>
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <%
@@ -27,19 +28,17 @@
         %>
         
         <div class="container">
-            <h2>Search Race Result</h2>
+            <h1>Search Race Result</h1>
             
-            <div class="search-info">
-                Result with keyword "<%= keyword %>" | Total: <%= stages != null ? stages.size() : 0 %>
+            <div class="info-box">
+                Result with keyword "<strong><%= keyword %></strong>" | Total: <strong><%= stages != null ? stages.size() : 0 %></strong>
             </div>
-            
-            <button class="tab-button">Stage List</button>
             
             <%
                 if (stages == null || stages.isEmpty()) {
             %>
-                <div class="no-results">
-                    <p>No races found matching your search keyword.</p>
+                <div class="card">
+                    <p style="text-align: center; color: #999;">No races found matching your search keyword.</p>
                 </div>
             <%
                 } else {
@@ -81,6 +80,11 @@
             <%
                 }
             %>
+            
+            <div class="button-group">
+                <a href="searchStage.jsp" class="back-button">New Search</a>
+                <a href="userHome.jsp" class="back-button">Home</a>
+            </div>
         </div>
     </body>
 </html>

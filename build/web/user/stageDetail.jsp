@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Stage Detail</title>
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <%
@@ -44,16 +45,19 @@
             <%
                 if (stage == null) {
             %>
-                <div class="error-message">
+                <div class="card">
                     <h3>Race Not Found</h3>
                     <p>The requested race (ID: <%= stageId %>) could not be found.</p>
                 </div>
             <%
                 } else {
             %>
-                <h2>Detail Race</h2>
+                <h1>Detail Race</h1>
                 
-                <div class="detail-section">
+                <div class="card">
+                    <h2><%= stage.getName() %></h2>
+                    
+                    <div class="detail-section">
                     <div class="detail-row">
                         <span class="detail-label">Race name:</span>
                         <span class="detail-value"><%= stage.getName() %></span>
@@ -98,9 +102,10 @@
                             <%= stage.getRoadmap() != null ? stage.getRoadmap() : "N/A" %>
                         </span>
                     </div>
+                    </div>
                 </div>
                 
-                <h3>Result</h3>
+                <h2>Result</h2>
                 
                 <table>
                     <thead>

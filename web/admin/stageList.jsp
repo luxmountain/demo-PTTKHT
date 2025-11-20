@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Danh sách chặng đua</title>
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <%
@@ -28,12 +29,12 @@
         %>
         
         <div class="container">
-            <a href="adminHome.jsp" class="back-link">← Quay lại trang chủ</a>
+            <a href="adminHome.jsp" class="back-button">← Quay lại trang chủ</a>
             
-            <h2>Danh sách chặng đua</h2>
+            <h1>Danh sách chặng đua</h1>
             
             <% if (message != null && message.equals("success")) { %>
-                <div class="message">
+                <div class="info-box" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left-color: #28a745;">
                     Cập nhật kết quả thành công!
                 </div>
             <% } %>
@@ -53,28 +54,28 @@
                     if (stages != null && !stages.isEmpty()) {
                         for (Stage stage : stages) {
                             String statusText = "";
-                            String statusClass = "";
+                            String statusBadge = "";
                             
                             if (stage.getDate() != null) {
                                 if (stage.getDate().before(today)) {
                                     statusText = "Đã hoàn thành";
-                                    statusClass = "status-completed";
+                                    statusBadge = "completed";
                                 } else {
                                     statusText = "Chưa diễn ra";
-                                    statusClass = "status-upcoming";
+                                    statusBadge = "upcoming";
                                 }
                             } else {
                                 statusText = "Chưa xác định";
-                                statusClass = "status-upcoming";
+                                statusBadge = "upcoming";
                             }
                     %>
                     <tr>
                         <td><%= stage.getName() %></td>
                         <td><%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></td>
                         <td><%= stage.getLocation() %></td>
-                        <td class="<%= statusClass %>"><%= statusText %></td>
+                        <td><span class="badge badge-<%= statusBadge %>"><%= statusText %></span></td>
                         <td>
-                            <a href="updateResult.jsp?stageId=<%= stage.getId() %>" class="btn">Cập nhật kết quả</a>
+                            <a href="updateResult.jsp?stageId=<%= stage.getId() %>" class="btn-primary">Cập nhật kết quả</a>
                         </td>
                     </tr>
                     <% 

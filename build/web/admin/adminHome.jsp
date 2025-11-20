@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Admin Home</title>
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <%
@@ -19,20 +20,24 @@
             } else {
         %>
         <div class="container">
-            <h2>Trang quản trị</h2>
+            <h1>Trang quản trị</h1>
             
-            <div class="welcome">
+            <div class="user-info">
                 <p><strong>Xin chào, <%= admin.getName() %>!</strong></p>
                 <p>Vai trò: Quản trị viên</p>
             </div>
             
-            <div class="menu">
-                <h3>Chức năng quản lý</h3>
-                <a href="stageList.jsp" class="menu-item">📊 Cập nhật kết quả chặng đua</a>
+            <div class="menu-grid">
+                <a href="stageList.jsp" class="menu-card">
+                    <h3>📊 Quản lý kết quả</h3>
+                    <p>Cập nhật kết quả chặng đua</p>
+                </a>
                 <!-- Add more menu items here as needed -->
             </div>
             
-            <a href="../login.jsp" class="logout">Đăng xuất</a>
+            <div class="button-group">
+                <a href="../login.jsp" class="back-button">Đăng xuất</a>
+            </div>
         </div>
         <%
             }

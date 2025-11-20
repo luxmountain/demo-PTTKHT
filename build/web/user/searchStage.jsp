@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Stage</title>
+        <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
         <%
@@ -20,19 +21,23 @@
             }
         %>
         
-        <div class="search-container">
-            <h2>Search</h2>
+        <div class="container">
+            <h1>Search Race</h1>
             
-            <form action="doSearchStage.jsp" method="post">
-                <div class="form-group">
-                    <label for="keyword">Keyword</label>
-                    <input type="text" id="keyword" name="keyword" required>
-                </div>
-                
-                <div class="button-group">
-                    <button type="submit">Search</button>
-                </div>
-            </form>
+            <div class="card">
+                <form action="doSearchStage.jsp" method="post">
+                    <div class="form-group">
+                        <label for="keyword">Keyword</label>
+                        <input type="text" id="keyword" name="keyword" 
+                               placeholder="Nhập từ khóa tìm kiếm..." required>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" class="btn-primary">Search</button>
+                        <a href="userHome.jsp" class="back-button">Back</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </body>
 </html>

@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Cập nhật kết quả chặng đua</title>
+        <link rel="stylesheet" href="../css/style.css">
         <script>
             function validateForm() {
                 var inputs = document.querySelectorAll('input[type="number"], input[type="time"]');
@@ -74,39 +75,41 @@
             Date today = new Date();
             
             String statusText = "";
-            String statusClass = "";
+            String statusBadge = "";
             
             if (stage.getDate() != null) {
                 if (stage.getDate().before(today)) {
                     statusText = "Đã hoàn thành";
-                    statusClass = "status-completed";
+                    statusBadge = "completed";
                 } else {
                     statusText = "Chưa diễn ra";
-                    statusClass = "status-upcoming";
+                    statusBadge = "upcoming";
                 }
             } else {
                 statusText = "Chưa xác định";
-                statusClass = "status-upcoming";
+                statusBadge = "upcoming";
             }
         %>
         
         <div class="container">
-            <a href="stageList.jsp" class="back-link">← Quay lại danh sách chặng đua</a>
+            <a href="stageList.jsp" class="back-button">← Quay lại danh sách chặng đua</a>
             
-            <h2>Cập nhật kết quả chặng đua</h2>
+            <h1>Cập nhật kết quả chặng đua</h1>
             
             <div class="stage-info">
                 <p><strong>Tên chặng đua:</strong> <%= stage.getName() %></p>
                 <p><strong>Ngày tổ chức:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></p>
                 <p><strong>Địa điểm:</strong> <%= stage.getLocation() %></p>
-                <p><strong>Trạng thái:</strong> <span class="<%= statusClass %>"><%= statusText %></span></p>
+                <p><strong>Trạng thái:</strong> <span class="badge badge-<%= statusBadge %>"><%= statusText %></span></p>
             </div>
             
             <% if (registers == null || registers.isEmpty()) { %>
-                <div class="error">
-                    Không có tay đua nào đăng ký tham gia chặng đua này.
+                <div class="card">
+                    <p style="color: #dc3545;">Không có tay đua nào đăng ký tham gia chặng đua này.</p>
                 </div>
-                <a href="stageList.jsp" class="btn btn-secondary">Quay lại</a>
+                <div class="button-group">
+                    <a href="stageList.jsp" class="back-button">Quay lại</a>
+                </div>
             <% } else { %>
             
             <form action="doUpdateResult.jsp" method="post" onsubmit="return validateForm()">
@@ -159,8 +162,8 @@
                 </table>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Lưu kết quả</button>
-                    <a href="stageList.jsp" class="btn btn-secondary">Hủy bỏ</a>
+                    <button type="submit" class="btn-primary">Lưu kết quả</button>
+                    <a href="stageList.jsp" class="back-button">Hủy bỏ</a>
                 </div>
             </form>
             
