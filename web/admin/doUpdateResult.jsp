@@ -45,7 +45,17 @@
                 // Parse time
                 Time timedone = null;
                 if (timeStr != null && !timeStr.trim().isEmpty()) {
-                    timedone = Time.valueOf(timeStr + ":00");
+                    try {
+                        // HTML5 time input returns HH:mm format, need to add seconds
+                        if (timeStr.length() == 5) {
+                            timedone = Time.valueOf(timeStr + ":00");
+                        } else if (timeStr.length() == 8) {
+                            timedone = Time.valueOf(timeStr);
+                        }
+                    } catch (Exception ex) {
+                        // Skip invalid time format
+                        ex.printStackTrace();
+                    }
                 }
                 
                 // Calculate points based on position (simple points system)
@@ -67,10 +77,12 @@
                     }
                 }
                 
-                // Update result
-                boolean success = resultDAO.updateResult(registerId, position, timedone, points);
-                if (!success) {
-                    allSuccess = false;
+                // Update result only if there's data to update
+                if (position != null || timedone != null) {
+                    boolean success = resultDAO.updateResult(registerId, position, timedone, points);
+                    if (!success) {
+                        allSuccess = false;
+                    }
                 }
             }
         }

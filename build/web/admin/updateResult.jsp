@@ -145,7 +145,7 @@
                                 <input type="number" 
                                        name="position_<%= i %>" 
                                        min="1" 
-                                       value="<%= position != null ? position : "" %>"
+                                       value="<%= position != null && position > 0 ? position : "" %>"
                                        placeholder="Enter position">
                             </td>
                             <td>
