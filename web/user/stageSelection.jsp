@@ -8,12 +8,12 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Chọn chặng đua</title>
+    <title>Select Stage</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Chọn chặng đua để xem bảng xếp hạng</h1>
+        <h1>Select a stage to view rankings</h1>
         
         <%
             SeasonDAO seasonDAO = new SeasonDAO();
@@ -25,7 +25,7 @@
         %>
                     <div class="season-section">
                         <div class="season-header">
-                            Mùa giải <%= season.getYear() %> - <%= season.getName() %>
+                            Season <%= season.getYear() %> - <%= season.getName() %>
                         </div>
                         
                         <%
@@ -48,7 +48,7 @@
                                                 <div class="stage-name"><%= stage.getName() %></div>
                                                 <div class="stage-info">
                                                     <%= stage.getLocation() %> - 
-                                                    <%= stage.getDate() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(stage.getDate()) : "Chưa có ngày" %>
+                                                    <%= stage.getDate() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(stage.getDate()) : "No date" %>
                                                 </div>
                                             </div>
                                             <div>➜</div>
@@ -65,7 +65,7 @@
                             } else {
                         %>
                                 <div class="message info">
-                                    Không có chặng đua nào trong mùa giải này.
+                                    No stages in this season.
                                 </div>
                         <%
                             }
@@ -76,15 +76,15 @@
             } else {
         %>
                 <div class="message info">
-                    Không có mùa giải nào được tìm thấy.
+                    No seasons found.
                 </div>
         <%
             }
         %>
 
         <div class="navigation">
-            <a href="teamRanking.jsp" class="btn btn-secondary">Quay lại bảng xếp hạng</a>
-            <a href="userHome.jsp" class="btn btn-secondary">Quay về màn hình chính</a>
+            <a href="teamRanking.jsp" class="btn btn-secondary">Back to Rankings</a>
+            <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
 </body>

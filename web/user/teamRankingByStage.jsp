@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Bảng xếp hạng đội đua theo chặng</title>
+    <title>Team Rankings by Stage</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -29,10 +29,10 @@
             if (stage == null) {
         %>
                 <div class="message info">
-                    Không tìm thấy chặng đua.
+                    Stage not found.
                 </div>
                 <div class="navigation">
-                    <a href="stageSelection.jsp" class="btn btn-secondary">Quay lại</a>
+                    <a href="stageSelection.jsp" class="btn btn-secondary">Back</a>
                 </div>
         <%
                 return;
@@ -41,14 +41,14 @@
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
         %>
         
-        <h1>Bảng xếp hạng đội đua theo chặng</h1>
+        <h1>Team Rankings by Stage</h1>
         
         <div class="stage-info">
             <h2><%= stage.getName() %></h2>
-            <p><strong>Địa điểm:</strong> <%= stage.getLocation() %></p>
-            <p><strong>Ngày tổ chức:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "Chưa xác định" %></p>
+            <p><strong>Location:</strong> <%= stage.getLocation() %></p>
+            <p><strong>Date:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></p>
             <% if (stage.getDescription() != null && !stage.getDescription().isEmpty()) { %>
-                <p><strong>Mô tả:</strong> <%= stage.getDescription() %></p>
+                <p><strong>Description:</strong> <%= stage.getDescription() %></p>
             <% } %>
         </div>
         
@@ -61,14 +61,14 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Thứ hạng</th>
-                        <th>Tên đội đua</th>
-                        <th>Quốc gia</th>
-                        <th>Số tay đua tham gia</th>
-                        <th>Vị trí cao nhất</th>
-                        <th>Tổng điểm</th>
-                        <th>Trạng thái</th>
-                        <th>Tùy chọn</th>
+                        <th>Rank</th>
+                        <th>Team Name</th>
+                        <th>Country</th>
+                        <th>Riders Participated</th>
+                        <th>Best Position</th>
+                        <th>Total Points</th>
+                        <th>Status</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,12 +89,12 @@
                         <td><%= team.get("totalPoints") %></td>
                         <td>
                             <span class="<%= (Boolean)team.get("status") ? "status-active" : "status-inactive" %>">
-                                <%= (Boolean)team.get("status") ? "Đang hoạt động" : "Không hoạt động" %>
+                                <%= (Boolean)team.get("status") ? "Active" : "Inactive" %>
                             </span>
                         </td>
                         <td>
                             <a href="teamDetailByStage.jsp?teamId=<%= team.get("teamId") %>&stageId=<%= stageId %>" class="btn">
-                                Xem chi tiết
+                                View Details
                             </a>
                         </td>
                     </tr>
@@ -107,16 +107,16 @@
             } else {
         %>
             <div class="message info">
-                Chưa có dữ liệu xếp hạng cho chặng đua này.
+                No ranking data for this stage.
             </div>
         <%
             }
         %>
         
         <div class="navigation">
-            <a href="stageSelection.jsp" class="btn btn-secondary">Quay lại chọn chặng đua</a>
-            <a href="teamRanking.jsp" class="btn btn-secondary">Quay lại bảng xếp hạng</a>
-            <a href="userHome.jsp" class="btn btn-secondary">Quay về màn hình chính</a>
+            <a href="stageSelection.jsp" class="btn btn-secondary">Back to Stage Selection</a>
+            <a href="teamRanking.jsp" class="btn btn-secondary">Back to Rankings</a>
+            <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
 </body>

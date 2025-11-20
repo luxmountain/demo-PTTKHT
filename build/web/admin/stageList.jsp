@@ -29,24 +29,24 @@
         %>
         
         <div class="container">
-            <a href="adminHome.jsp" class="back-button">← Quay lại trang chủ</a>
-            
-            <h1>Danh sách chặng đua</h1>
+            <a href="adminHome.jsp" class="back-button">← Back to Dashboard</a>
+
+            <h1>Stage List</h1>
             
             <% if (message != null && message.equals("success")) { %>
                 <div class="info-box" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left-color: #28a745;">
-                    Cập nhật kết quả thành công!
+                    Results updated successfully!
                 </div>
             <% } %>
             
             <table>
                 <thead>
                     <tr>
-                        <th>Tên chặng đua</th>
-                        <th>Ngày tổ chức</th>
-                        <th>Địa điểm</th>
-                        <th>Trạng thái</th>
-                        <th>Tùy chọn</th>
+                        <th>Stage Name</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,7 +75,7 @@
                         <td><%= stage.getLocation() %></td>
                         <td><span class="badge badge-<%= statusBadge %>"><%= statusText %></span></td>
                         <td>
-                            <a href="updateResult.jsp?stageId=<%= stage.getId() %>" class="btn-primary">Cập nhật kết quả</a>
+                            <a href="updateResult.jsp?stageId=<%= stage.getId() %>" class="btn-primary">Update Results</a>
                         </td>
                     </tr>
                     <% 
@@ -83,7 +83,7 @@
                     } else {
                     %>
                     <tr>
-                        <td colspan="5" style="text-align: center;">Không có chặng đua nào</td>
+                        <td colspan="5" style="text-align: center;">No stages available</td>
                     </tr>
                     <% } %>
                 </tbody>

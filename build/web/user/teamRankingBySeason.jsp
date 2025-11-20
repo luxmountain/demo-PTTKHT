@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Bảng xếp hạng đội đua theo mùa giải</title>
+    <title>Team Rankings by Season</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -29,7 +29,7 @@
             if (season == null) {
         %>
                 <div class="message info">
-                    Không tìm thấy mùa giải.
+                    Season not found.
                 </div>
                 <div class="navigation">
                     <a href="teamRanking.jsp" class="btn btn-secondary">Quay lại</a>
@@ -39,8 +39,8 @@
             }
         %>
         
-        <h1>Bảng xếp hạng đội đua</h1>
-        <h2>Mùa giải <%= season.getYear() %> - <%= season.getName() %></h2>
+        <h1>Team Rankings</h1>
+        <h2>Season <%= season.getYear() %> - <%= season.getName() %></h2>
         
         <%
             TeamDAO teamDAO = new TeamDAO();
@@ -51,13 +51,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Thứ hạng</th>
-                        <th>Tên đội đua</th>
-                        <th>Số chặng tham gia</th>
-                        <th>Số điểm</th>
-                        <th>Số lần thắng chặng</th>
-                        <th>Trạng thái</th>
-                        <th>Tùy chọn</th>
+                        <th>Rank</th>
+                        <th>Team Name</th>
+                        <th>Stages Participated</th>
+                        <th>Points</th>
+                        <th>Stage Wins</th>
+                        <th>Status</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,12 +77,12 @@
                         <td><%= team.get("wins") %></td>
                         <td>
                             <span class="<%= (Boolean)team.get("status") ? "status-active" : "status-inactive" %>">
-                                <%= (Boolean)team.get("status") ? "Đang thi đấu" : "Không hoạt động" %>
+                                <%= (Boolean)team.get("status") ? "Active" : "Inactive" %>
                             </span>
                         </td>
                         <td>
                             <a href="teamDetail.jsp?teamId=<%= team.get("teamId") %>&seasonId=<%= seasonId %>" class="btn">
-                                Xem chi tiết
+                                View Details
                             </a>
                         </td>
                     </tr>
@@ -95,15 +95,15 @@
             } else {
         %>
             <div class="message info">
-                Chưa có dữ liệu xếp hạng cho mùa giải này.
+                No ranking data for this season.
             </div>
         <%
             }
         %>
         
         <div class="navigation">
-            <a href="teamRanking.jsp" class="btn btn-secondary">Quay lại bảng xếp hạng</a>
-            <a href="userHome.jsp" class="btn btn-secondary">Quay về màn hình chính</a>
+            <a href="teamRanking.jsp" class="btn btn-secondary">Back to Rankings</a>
+            <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
 </body>

@@ -20,23 +20,22 @@
             } else {
         %>
         <div class="container">
-            <h1>Trang quản trị</h1>
+            <h1>Admin Dashboard</h1>
             
             <div class="user-info">
-                <p><strong>Xin chào, <%= admin.getName() %>!</strong></p>
-                <p>Vai trò: Quản trị viên</p>
+                <p><strong>Hello, <%= admin.getName() %>!</strong></p>
+                <p>Role: Administrator</p>
             </div>
             
             <div class="menu-grid">
                 <a href="stageList.jsp" class="menu-card">
-                    <h3>📊 Quản lý kết quả</h3>
-                    <p>Cập nhật kết quả chặng đua</p>
+                    <p>Update Stage Results</p>
                 </a>
                 <!-- Add more menu items here as needed -->
             </div>
             
             <div class="button-group">
-                <a href="../login.jsp" class="back-button">Đăng xuất</a>
+                <a href="../login.jsp" class="back-button">Logout</a>
             </div>
         </div>
         <%

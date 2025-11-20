@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Chi tiết tay đua</title>
+    <title>Racer Details</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -38,10 +38,10 @@
             if (racerDetails == null || racerDetails.isEmpty() || season == null) {
         %>
                 <div class="message info">
-                    Không tìm thấy thông tin tay đua hoặc mùa giải.
+                    Racer or season information not found.
                 </div>
                 <div class="navigation">
-                    <a href="teamRanking.jsp" class="btn btn-secondary">Quay lại</a>
+                    <a href="teamRanking.jsp" class="btn btn-secondary">Back</a>
                 </div>
         <%
                 return;
@@ -54,27 +54,27 @@
             SimpleDateFormat sdfTime = new SimpleDateFormat("HH'h' mm'm' ss's'");
         %>
         
-        <h1>Chi tiết tay đua</h1>
+        <h1>Racer Details</h1>
         
         <div class="racer-info">
             <h2><%= racerDetails.get("racerName") %></h2>
-            <p><strong>Ngày sinh:</strong> <%= racerDetails.get("dob") != null ? sdf.format(racerDetails.get("dob")) : "Không có thông tin" %></p>
-            <p><strong>Quốc tịch:</strong> <%= racerDetails.get("nationality") %></p>
-            <p><strong>Đội đua:</strong> <%= teamName != null ? teamName : "Không có thông tin" %></p>
-            <p><strong>Số áo:</strong> <%= racerDetails.get("shirtNumber") %></p>
-            <p><strong>Mùa giải:</strong> <%= season.getYear() %> - <%= season.getName() %></p>
+            <p><strong>Date of Birth:</strong> <%= racerDetails.get("dob") != null ? sdf.format(racerDetails.get("dob")) : "No information" %></p>
+            <p><strong>Nationality:</strong> <%= racerDetails.get("nationality") %></p>
+            <p><strong>Team:</strong> <%= teamName != null ? teamName : "No information" %></p>
+            <p><strong>Shirt No:</strong> <%= racerDetails.get("shirtNumber") %></p>
+            <p><strong>Season:</strong> <%= season.getYear() %> - <%= season.getName() %></p>
         </div>
 
         <div class="section">
-            <h3>Thống kê cá nhân trong mùa giải</h3>
+            <h3>Season statistics</h3>
             <div class="stats-summary">
                 <div class="stat-box">
                     <div class="value"><%= racerStats.get("stagesParticipated") %></div>
-                    <div class="label">Tổng số chặng tham gia</div>
+                    <div class="label">Total stages participated</div>
                 </div>
                 <div class="stat-box">
                     <div class="value"><%= racerStats.get("totalPoints") %></div>
-                    <div class="label">Tổng điểm tích lũy</div>
+                    <div class="label">Total Points</div>
                 </div>
                 <div class="stat-box">
                     <div class="value">
@@ -87,24 +87,24 @@
                             }
                         %>
                     </div>
-                    <div class="label">Thứ hạng cá nhân trong mùa giải</div>
+                    <div class="label">Individual rank in season</div>
                 </div>
             </div>
         </div>
 
         <div class="section">
-            <h3>Thành tích cá nhân theo từng chặng</h3>
+            <h3>Individual stage performances</h3>
             <%
                 if (performances != null && !performances.isEmpty()) {
             %>
                 <table>
                     <thead>
                         <tr>
-                            <th>Chặng đua</th>
-                            <th>Ngày tổ chức</th>
-                            <th>Thứ hạng</th>
-                            <th>Thời gian hoàn thành</th>
-                            <th>Điểm</th>
+                            <th>Stage</th>
+                            <th>Date</th>
+                            <th>Rank</th>
+                            <th>Finish Time</th>
+                            <th>Points</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,7 +132,7 @@
                 } else {
             %>
                 <div class="message info">
-                    Không có dữ liệu thành tích theo chặng.
+                    No stage performance data.
                 </div>
             <%
                 }
@@ -143,12 +143,12 @@
             <%
                 if (teamId != null) {
             %>
-                <a href="teamDetail.jsp?teamId=<%= teamId %>&seasonId=<%= seasonId %>" class="btn btn-secondary">Quay lại đội đua</a>
+                <a href="teamDetail.jsp?teamId=<%= teamId %>&seasonId=<%= seasonId %>" class="btn btn-secondary">Back to Team</a>
             <%
                 }
             %>
-            <a href="teamRankingBySeason.jsp?seasonId=<%= seasonId %>" class="btn btn-secondary">Quay lại bảng xếp hạng</a>
-            <a href="userHome.jsp" class="btn btn-secondary">Quay về màn hình chính</a>
+            <a href="teamRankingBySeason.jsp?seasonId=<%= seasonId %>" class="btn btn-secondary">Back to Rankings</a>
+            <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
 </body>

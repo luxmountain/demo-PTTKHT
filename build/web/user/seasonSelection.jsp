@@ -6,12 +6,12 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Chọn mùa giải</title>
+    <title>Select Season</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Chọn mùa giải</h1>
+        <h1>Select Season</h1>
         
         <%
             SeasonDAO seasonDAO = new SeasonDAO();
@@ -36,15 +36,15 @@
             } else {
         %>
             <div class="message info">
-                Không có mùa giải nào được tìm thấy.
+                No seasons found.
             </div>
         <%
             }
         %>
 
         <div class="navigation">
-            <a href="teamRanking.jsp" class="btn btn-secondary">Quay lại</a>
-            <a href="userHome.jsp" class="btn btn-secondary">Quay về màn hình chính</a>
+            <a href="teamRanking.jsp" class="btn btn-secondary">Back</a>
+            <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
 </body>

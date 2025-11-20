@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Cập nhật kết quả chặng đua</title>
+        <title>Update Stage Results</title>
         <link rel="stylesheet" href="../css/style.css">
         <script>
             function validateForm() {
@@ -24,7 +24,7 @@
                 }
                 
                 if (!hasData) {
-                    alert('Vui lòng nhập ít nhất một kết quả!');
+                    alert('Please enter at least one result!');
                     return false;
                 }
                 
@@ -35,12 +35,12 @@
                     var time = rows[i].querySelector('input[name^="time"]').value;
                     
                     if (position !== '' && time === '') {
-                        alert('Vui lòng nhập thời gian hoàn thành cho tay đua có thứ hạng ' + position);
+                        alert('Please enter finish time for the rider with position ' + position);
                         return false;
                     }
                 }
                 
-                return confirm('Bạn có chắc chắn muốn lưu kết quả này?');
+                return confirm('Are you sure you want to save these results?');
             }
         </script>
     </head>
@@ -79,36 +79,36 @@
             
             if (stage.getDate() != null) {
                 if (stage.getDate().before(today)) {
-                    statusText = "Đã hoàn thành";
+                    statusText = "Completed";
                     statusBadge = "completed";
                 } else {
-                    statusText = "Chưa diễn ra";
+                    statusText = "Upcoming";
                     statusBadge = "upcoming";
                 }
             } else {
-                statusText = "Chưa xác định";
+                statusText = "Unknown";
                 statusBadge = "upcoming";
             }
         %>
         
         <div class="container">
-            <a href="stageList.jsp" class="back-button">← Quay lại danh sách chặng đua</a>
-            
-            <h1>Cập nhật kết quả chặng đua</h1>
+            <a href="stageList.jsp" class="back-button">← Back to Stage List</a>
+
+            <h1>Update Stage Results</h1>
             
             <div class="stage-info">
-                <p><strong>Tên chặng đua:</strong> <%= stage.getName() %></p>
-                <p><strong>Ngày tổ chức:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></p>
-                <p><strong>Địa điểm:</strong> <%= stage.getLocation() %></p>
-                <p><strong>Trạng thái:</strong> <span class="badge badge-<%= statusBadge %>"><%= statusText %></span></p>
+                <p><strong>Stage Name:</strong> <%= stage.getName() %></p>
+                <p><strong>Date:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></p>
+                <p><strong>Location:</strong> <%= stage.getLocation() %></p>
+                <p><strong>Status:</strong> <span class="badge badge-<%= statusBadge %>"><%= statusText %></span></p>
             </div>
             
             <% if (registers == null || registers.isEmpty()) { %>
                 <div class="card">
-                    <p style="color: #dc3545;">Không có tay đua nào đăng ký tham gia chặng đua này.</p>
+                    <p style="color: #dc3545;">No riders registered for this stage.</p>
                 </div>
                 <div class="button-group">
-                    <a href="stageList.jsp" class="back-button">Quay lại</a>
+                    <a href="stageList.jsp" class="back-button">Back</a>
                 </div>
             <% } else { %>
             
@@ -118,10 +118,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Tên tay đua</th>
-                            <th>Đội đua</th>
-                            <th>Thứ hạng</th>
-                            <th>Thời gian hoàn thành</th>
+                            <th>Rider Name</th>
+                            <th>Team</th>
+                            <th>Position</th>
+                            <th>Finish Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,7 +146,7 @@
                                        name="position_<%= i %>" 
                                        min="1" 
                                        value="<%= position != null ? position : "" %>"
-                                       placeholder="Nhập thứ hạng">
+                                       placeholder="Enter position">
                             </td>
                             <td>
                                 <input type="time" 
@@ -162,8 +162,8 @@
                 </table>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Lưu kết quả</button>
-                    <a href="stageList.jsp" class="back-button">Hủy bỏ</a>
+                    <button type="submit" class="btn-primary">Save results</button>
+                    <a href="stageList.jsp" class="back-button">Cancel</a>
                 </div>
             </form>
             

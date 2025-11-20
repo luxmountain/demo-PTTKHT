@@ -10,7 +10,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Chi tiết đội đua trong chặng</title>
+    <title>Team Details - Stage</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -36,10 +36,10 @@
             if (team == null || stage == null) {
         %>
                 <div class="message info">
-                    Không tìm thấy thông tin đội đua hoặc chặng đua.
+                    Team or stage information not found.
                 </div>
                 <div class="navigation">
-                    <a href="stageSelection.jsp" class="btn btn-secondary">Quay lại</a>
+                    <a href="stageSelection.jsp" class="btn btn-secondary">Back</a>
                 </div>
         <%
                 return;
@@ -51,18 +51,18 @@
             SimpleDateFormat sdfTime = new SimpleDateFormat("HH'h' mm'm' ss's'");
         %>
         
-        <h1>Chi tiết đội đua trong chặng</h1>
+        <h1>Team Details - Stage</h1>
         
         <div class="info-section">
             <h2><%= team.getName() %></h2>
-            <p><strong>Quốc gia:</strong> <%= team.getNation() %></p>
-            <p><strong>Chặng đua:</strong> <%= stage.getName() %></p>
-            <p><strong>Địa điểm:</strong> <%= stage.getLocation() %></p>
-            <p><strong>Ngày tổ chức:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "Chưa xác định" %></p>
+            <p><strong>Country:</strong> <%= team.getNation() %></p>
+            <p><strong>Stage:</strong> <%= stage.getName() %></p>
+            <p><strong>Location:</strong> <%= stage.getLocation() %></p>
+            <p><strong>Date:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></p>
         </div>
 
         <div class="section">
-            <h3>Danh sách tay đua và kết quả</h3>
+            <h3>Riders and Results</h3>
             <%
                 if (racers != null && !racers.isEmpty()) {
                     int totalPoints = 0;
@@ -77,20 +77,20 @@
                     }
             %>
                 <div class="info-section">
-                    <p><strong>Tổng điểm của đội:</strong> <%= totalPoints %> điểm</p>
-                    <p><strong>Vị trí cao nhất:</strong> <%= bestPosition %></p>
-                    <p><strong>Số tay đua tham gia:</strong> <%= racers.size() %></p>
+                    <p><strong>Team total points:</strong> <%= totalPoints %> points</p>
+                    <p><strong>Best position:</strong> <%= bestPosition %></p>
+                    <p><strong>Number of participating riders:</strong> <%= racers.size() %></p>
                 </div>
                 
                 <table>
                     <thead>
                         <tr>
-                            <th>Số áo</th>
-                            <th>Tên tay đua</th>
-                            <th>Thứ hạng</th>
-                            <th>Thời gian hoàn thành</th>
-                            <th>Điểm</th>
-                            <th>Tùy chọn</th>
+                            <th>Shirt No</th>
+                            <th>Rider Name</th>
+                            <th>Rank</th>
+                            <th>Finish Time</th>
+                            <th>Points</th>
+                            <th>Options</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -110,7 +110,7 @@
                             <td><%= racer.get("points") %></td>
                             <td>
                                 <a href="racerDetail.jsp?racerId=<%= racer.get("racerId") %>&seasonId=<%= stage.getSeasonId() %>" class="btn">
-                                    Xem chi tiết tay đua
+                                    View rider details
                                 </a>
                             </td>
                         </tr>
@@ -123,7 +123,7 @@
                 } else {
             %>
                 <div class="message info">
-                    Đội này không có tay đua nào tham gia chặng đua này.
+                    This team has no riders in this stage.
                 </div>
             <%
                 }
@@ -131,9 +131,9 @@
         </div>
 
         <div class="navigation">
-            <a href="teamRankingByStage.jsp?stageId=<%= stageId %>" class="btn btn-secondary">Quay lại bảng xếp hạng</a>
-            <a href="stageSelection.jsp" class="btn btn-secondary">Quay lại chọn chặng đua</a>
-            <a href="userHome.jsp" class="btn btn-secondary">Quay về màn hình chính</a>
+            <a href="teamRankingByStage.jsp?stageId=<%= stageId %>" class="btn btn-secondary">Back to Rankings</a>
+            <a href="stageSelection.jsp" class="btn btn-secondary">Back to Stage Selection</a>
+            <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
 </body>

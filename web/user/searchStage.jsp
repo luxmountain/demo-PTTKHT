@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <label for="keyword">Keyword</label>
                         <input type="text" id="keyword" name="keyword" 
-                               placeholder="Nhập từ khóa tìm kiếm..." required>
+                               placeholder="Enter keyword..." required>
                     </div>
                     
                     <div class="button-group">

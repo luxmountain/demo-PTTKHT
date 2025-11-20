@@ -25,20 +25,20 @@
             <div class="user-info">
                 <strong>Name:</strong> <%= user.getName() %>
             </div>
-            
+
             <div class="menu-grid">
                 <a href="searchStage.jsp" class="menu-card">
                     <h3>Search Race</h3>
-                    <p>Tìm kiếm thông tin chặng đua</p>
+                    <p>Search race information</p>
                 </a>
-                <a href="teamRanking.jsp" class="menu-card">
+<!--                <a href="teamRanking.jsp" class="menu-card">
                     <h3>Team Rankings</h3>
-                    <p>Xem bảng xếp hạng các đội đua</p>
-                </a>
+                    <p>View team rankings</p>
+                </a>-->
             </div>
 
             <div class="button-group">
-                <a href="../login.jsp" class="back-button">Đăng xuất</a>
+                <a href="../login.jsp" class="back-button">Logout</a>
             </div>
         </div>
         <%
