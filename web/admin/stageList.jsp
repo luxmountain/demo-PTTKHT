@@ -47,6 +47,7 @@
                         <th>Date</th>
                         <th>Location</th>
                         <th>Status</th>
+                        <th>Total Laps</th>
                         <th>Options</th>
                     </tr>
                 </thead>
@@ -77,6 +78,7 @@
                         <td><%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></td>
                         <td><%= stage.getLocation() %></td>
                         <td><span class="badge badge-<%= statusBadge %>"><%= statusText %></span></td>
+                        <td><%= stage.getTotalLaps() %></td>
                         <td>
                             <a href="updateResult.jsp?stageId=<%= stage.getId() %>" class="btn-primary">Update Results</a>
                         </td>
