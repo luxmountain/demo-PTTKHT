@@ -146,7 +146,7 @@
                         <td><%= (i + 1)%></td>
                         <td><%= (reg.getContract() != null && reg.getContract().getRacer() != null) ? reg.getContract().getRacer().getName() : "N/A"%></td>
                         <td><%= (reg.getContract() != null && reg.getContract().getTeam() != null) ? reg.getContract().getTeam().getName() : "N/A"%></td>
-                        <td><%= (reg.getLapsCompleted())%></td>
+                        <td><%= (reg.getResult().getLapsCompleted())%></td>
                         <td><%= (r != null && r.getTimedone() != null ? timeFormat.format(r.getTimedone()) : "N/A")%></td>
                     </tr>
                     <%
