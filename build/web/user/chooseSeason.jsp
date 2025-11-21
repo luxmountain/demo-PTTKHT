@@ -24,7 +24,7 @@
                     for (Season season : seasons) {
                 %>
                 <li>
-                    <a href="teamRankingBySeason.jsp?seasonId=<%= season.getId() %>">
+                    <a href="teamRanking.jsp?seasonId=<%= season.getId() %>">
                         <%= season.getYear() %> - <%= season.getName() %>
                     </a>
                 </li>
@@ -43,7 +43,7 @@
         %>
 
         <div class="navigation">
-            <a href="teamRanking.jsp" class="btn btn-secondary">Back</a>
+            <a href="chooseTypeRanking.jsp" class="btn btn-secondary">Back</a>
             <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>

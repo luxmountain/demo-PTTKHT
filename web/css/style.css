@@ -20,6 +20,10 @@ body {
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 
+.filter-section h2{
+    text-align: center;
+}
+
 /* Typography */
 h1 {
     color: #2c3e50;

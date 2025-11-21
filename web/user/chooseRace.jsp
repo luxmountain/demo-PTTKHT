@@ -43,7 +43,7 @@
                                     }
                         %>
                                     <li>
-                                        <a href="teamRankingByStage.jsp?stageId=<%= stage.getId() %>">
+                                        <a href="teamRanking.jsp?stageId=<%= stage.getId() %>">
                                             <div>
                                                 <div class="stage-name"><%= stage.getName() %></div>
                                                 <div class="stage-info">
@@ -83,7 +83,7 @@
         %>
 
         <div class="navigation">
-            <a href="teamRanking.jsp" class="btn btn-secondary">Back to Rankings</a>
+            <a href="chooseTypeRanking.jsp" class="btn btn-secondary">Back</a>
             <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>

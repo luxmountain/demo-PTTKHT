@@ -21,18 +21,18 @@
         %>
         <div class="container">
             <h1>Home</h1>
-            
+
             <div class="user-info">
-                <strong>Name:</strong> <%= user.getName() %>
+                <strong>Name:</strong> <%= user.getName()%>
             </div>
 
             <div class="menu-grid">
                 <a href="searchStage.jsp" class="menu-card">
                     <h3>Search Race</h3>
                 </a>
-<!--                <a href="teamRanking.jsp" class="menu-card">
+                <a href="chooseTypeRanking.jsp" class="menu-card">
                     <h3>Team Rankings</h3>
-                </a>-->
+                </a>
             </div>
 
             <div class="button-group">
