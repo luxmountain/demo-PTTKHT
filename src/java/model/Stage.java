@@ -19,6 +19,7 @@ public class Stage {
     private String roadmap;
     private boolean status;
     private int seasonId;
+    private int totalLaps;
 
     public int getId() {
         return id;
@@ -82,5 +83,13 @@ public class Stage {
 
     public void setSeasonId(int seasonId) {
         this.seasonId = seasonId;
+    }
+
+    public int getTotalLaps() {
+        return totalLaps;
+    }
+
+    public void setTotalLaps(int totalLaps) {
+        this.totalLaps = totalLaps;
     }
 }

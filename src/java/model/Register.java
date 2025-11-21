@@ -14,6 +14,7 @@ public class Register {
     private int id;
     private Date dateRegistered;
     private boolean status;
+    private int lapsCompleted;
     private Contract contract;
     private Stage stage;
     private Result result;
@@ -40,6 +41,14 @@ public class Register {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public int getLapsCompleted() {
+        return lapsCompleted;
+    }
+
+    public void setLapsCompleted(int lapsCompleted) {
+        this.lapsCompleted = lapsCompleted;
     }
 
     public Contract getContract() {
