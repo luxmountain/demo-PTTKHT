@@ -5,8 +5,12 @@ import java.sql.ResultSet;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import model.Contract;
+import model.Racer;
 import model.Register;
 import model.Result;
+import model.Stage;
+import model.Team;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -65,7 +69,7 @@ public class RegisterDAO extends DAO {
                 register.setStatus(rs.getBoolean("status"));
 
                 // Create Racer object
-                model.Racer racer = new model.Racer();
+                Racer racer = new Racer();
                 racer.setId(rs.getInt("racer_id"));
                 racer.setName(rs.getString("racer_name"));
                 racer.setUsername(rs.getString("racer_username"));
@@ -79,7 +83,7 @@ public class RegisterDAO extends DAO {
                 racer.setStatus(rs.getBoolean("racer_status"));
 
                 // Create Team object
-                model.Team team = new model.Team();
+                Team team = new Team();
                 team.setId(rs.getInt("team_id"));
                 team.setName(rs.getString("team_name"));
                 team.setDescription(rs.getString("team_desc"));
@@ -88,7 +92,7 @@ public class RegisterDAO extends DAO {
                 team.setStatus(rs.getBoolean("team_status"));
 
                 // Create and set Contract object
-                model.Contract contract = new model.Contract();
+                Contract contract = new Contract();
                 contract.setId(rs.getInt("contract_id"));
                 contract.setSalary(rs.getFloat("salary"));
                 contract.setStartdate(rs.getDate("startdate"));
@@ -99,7 +103,7 @@ public class RegisterDAO extends DAO {
                 register.setContract(contract);
 
                 // Create and set Stage object
-                model.Stage stage = new model.Stage();
+                Stage stage = new Stage();
                 stage.setId(rs.getInt("stage_id"));
                 stage.setName(rs.getString("stage_name"));
                 stage.setDate(rs.getDate("stage_date"));
