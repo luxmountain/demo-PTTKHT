@@ -12,7 +12,7 @@ import java.sql.Time;
  */
 public class Result {
     private int id;
-    private int position;
+    private int lapsCompleted;
     private int points;
     private Time timedone;
 
@@ -24,12 +24,12 @@ public class Result {
         this.id = id;
     }
 
-    public int getPosition() {
-        return position;
+    public int getLapsCompleted() {
+        return lapsCompleted;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setLapsCompleted(int lapsCompleted) {
+        this.lapsCompleted = lapsCompleted;
     }
 
     public int getPoints() {

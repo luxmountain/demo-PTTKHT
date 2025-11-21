@@ -46,7 +46,7 @@ public class RegisterDAO extends DAO {
                 + "t.nation as team_nation, t.totalpoints, t.status as team_status, "
                 + "c.salary, c.startdate, c.enddate, c.status as contract_status, "
                 + "s.name as stage_name, s.date as stage_date, s.location, s.description, s.roadmap, s.status as stage_status, s.tblSeasonid, "
-                + "r.position, r.timedone, r.points "
+                + "r.laps_completed, r.timedone, r.points "
                 + "FROM tblregister r "
                 + "INNER JOIN tblcontract c ON r.tblContractid = c.id "
                 + "INNER JOIN tblracer ra ON c.tblRacerid = ra.id "
@@ -117,9 +117,9 @@ public class RegisterDAO extends DAO {
                 // Create and set Result object
                 Result result = new Result();
 
-                int position = rs.getInt("position");
+                int lapsCompleted = rs.getInt("laps_completed");
                 if (!rs.wasNull()) {
-                    result.setPosition(position);
+                    result.setLapsCompleted(lapsCompleted);
                 }
 
                 Time timedone = rs.getTime("timedone");

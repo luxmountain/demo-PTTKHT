@@ -16,19 +16,19 @@ public class ResultDAO extends DAO {
     /**
      * Update result for a register
      * @param registerId the register ID
-     * @param position the position/rank
+     * @param lapsCompleted the number of laps completed
      * @param timedone the completion time
      * @param points the points earned
      * @return true if successful
      */
-    public boolean updateResult(int registerId, Integer position, Time timedone, Integer points) {
-        String sql = "UPDATE tblregister SET position = ?, timedone = ?, points = ? WHERE id = ?";
+    public boolean updateResult(int registerId, Integer lapsCompleted, Time timedone, Integer points) {
+        String sql = "UPDATE tblregister SET laps_completed = ?, timedone = ?, points = ? WHERE id = ?";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             
-            if (position != null) {
-                ps.setInt(1, position);
+            if (lapsCompleted != null) {
+                ps.setInt(1, lapsCompleted);
             } else {
                 ps.setNull(1, java.sql.Types.INTEGER);
             }

@@ -27,19 +27,24 @@
         ResultDAO resultDAO = new ResultDAO();
         boolean allSuccess = true;
         
+        // Get total laps for the stage
+        StageDAO stageDAO = new StageDAO();
+        Stage stage = stageDAO.getStageInfo(stageId);
+        int totalLaps = (stage != null) ? stage.getTotalLaps() : 0;
+        
         // Process each racer's result
         for (int i = 0; i < racerCount; i++) {
             String registerIdStr = request.getParameter("registerId_" + i);
-            String positionStr = request.getParameter("position_" + i);
+            String lapsCompletedStr = request.getParameter("laps_" + i);
             String timeStr = request.getParameter("time_" + i);
             
             if (registerIdStr != null && !registerIdStr.trim().isEmpty()) {
                 int registerId = Integer.parseInt(registerIdStr);
                 
-                // Parse position
-                Integer position = null;
-                if (positionStr != null && !positionStr.trim().isEmpty()) {
-                    position = Integer.parseInt(positionStr);
+                // Parse laps completed
+                Integer lapsCompleted = null;
+                if (lapsCompletedStr != null && !lapsCompletedStr.trim().isEmpty()) {
+                    lapsCompleted = Integer.parseInt(lapsCompletedStr);
                 }
                 
                 // Parse time
@@ -61,28 +66,18 @@
                     }
                 }
                 
-                // Calculate points based on position (simple points system)
+                // Calculate points based on whether racer finished the race
+                // Only award points if laps completed equals total laps
                 Integer points = null;
-                if (position != null) {
-                    // Points system: 1st = 25, 2nd = 18, 3rd = 15, 4th = 12, 5th = 10, 6th = 8, 7th = 6, 8th = 4, 9th = 2, 10th = 1
-                    switch (position) {
-                        case 1: points = 25; break;
-                        case 2: points = 18; break;
-                        case 3: points = 15; break;
-                        case 4: points = 12; break;
-                        case 5: points = 10; break;
-                        case 6: points = 8; break;
-                        case 7: points = 6; break;
-                        case 8: points = 4; break;
-                        case 9: points = 2; break;
-                        case 10: points = 1; break;
-                        default: points = 0; break;
-                    }
+                if (lapsCompleted != null && totalLaps > 0 && lapsCompleted >= totalLaps && timedone != null) {
+                    // Points awarded based on finishing order (will be calculated after sorting by time)
+                    // For now, just mark as completed - points can be recalculated later
+                    points = 0; // Placeholder, actual points depend on final ranking
                 }
                 
-                // Update result only if there's data to update
-                if (position != null || timedone != null) {
-                    boolean success = resultDAO.updateResult(registerId, position, timedone, points);
+                // Update result if there's data to update
+                if (lapsCompleted != null || timedone != null) {
+                    boolean success = resultDAO.updateResult(registerId, lapsCompleted, timedone, points);
                     if (!success) {
                         allSuccess = false;
                     }

@@ -20,7 +20,7 @@ public class StageDAO extends DAO {
     public List<Stage> searchStage(String keyword) {
         List<Stage> stages = new ArrayList<>();
         
-        String sql = "SELECT id, name, date, location, description, roadmap, status, tblSeasonid "
+        String sql = "SELECT id, name, date, location, description, roadmap, total_laps, status, tblSeasonid "
                 + "FROM tblstage "
                 + "WHERE (name LIKE ? OR location LIKE ? OR description LIKE ?) "
                 + "AND status = 1 "
@@ -43,6 +43,7 @@ public class StageDAO extends DAO {
                 stage.setLocation(rs.getString("location"));
                 stage.setDescription(rs.getString("description"));
                 stage.setRoadmap(rs.getString("roadmap"));
+                stage.setTotalLaps(rs.getInt("total_laps"));
                 stage.setStatus(rs.getBoolean("status"));
                 stage.setSeasonId(rs.getInt("tblSeasonid"));
                 
@@ -66,7 +67,7 @@ public class StageDAO extends DAO {
     public Stage getStageInfo(int stageId) {
         Stage stage = null;
         
-        String sql = "SELECT id, name, date, location, description, roadmap, status, tblSeasonid "
+        String sql = "SELECT id, name, date, location, description, roadmap, total_laps, status, tblSeasonid "
                 + "FROM tblstage "
                 + "WHERE id = ?";
         
@@ -84,6 +85,7 @@ public class StageDAO extends DAO {
                 stage.setLocation(rs.getString("location"));
                 stage.setDescription(rs.getString("description"));
                 stage.setRoadmap(rs.getString("roadmap"));
+                stage.setTotalLaps(rs.getInt("total_laps"));
                 stage.setStatus(rs.getBoolean("status"));
                 stage.setSeasonId(rs.getInt("tblSeasonid"));
             }
@@ -104,7 +106,7 @@ public class StageDAO extends DAO {
     public List<Stage> getAllStages() {
         List<Stage> stages = new ArrayList<>();
         
-        String sql = "SELECT id, name, date, location, description, roadmap, status, tblSeasonid "
+        String sql = "SELECT id, name, date, location, description, roadmap, total_laps, status, tblSeasonid "
                 + "FROM tblstage "
                 + "ORDER BY date DESC";
         
@@ -120,6 +122,7 @@ public class StageDAO extends DAO {
                 stage.setLocation(rs.getString("location"));
                 stage.setDescription(rs.getString("description"));
                 stage.setRoadmap(rs.getString("roadmap"));
+                stage.setTotalLaps(rs.getInt("total_laps"));
                 stage.setStatus(rs.getBoolean("status"));
                 stage.setSeasonId(rs.getInt("tblSeasonid"));
                 
