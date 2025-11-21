@@ -142,18 +142,24 @@
                             </td>
                             <td><%= (register.getContract() != null && register.getContract().getTeam() != null) ? register.getContract().getTeam().getName() : "N/A" %></td>
                             <td>
-                                <input type="number" 
-                                       name="position_<%= i %>" 
-                                       min="1" 
-                                       value="<%= position != null && position > 0 ? position : "" %>"
-                                       placeholder="Enter position">
+                                <div class="position-input-wrapper">
+                                    <input type="number" 
+                                           class="position-input"
+                                           name="position_<%= i %>" 
+                                           min="1" 
+                                           value="<%= position != null && position > 0 ? position : "" %>"
+                                           placeholder="Position">
+                                </div>
                             </td>
                             <td>
-                                <input type="time" 
-                                       name="time_<%= i %>" 
-                                       step="1"
-                                       value="<%= timeValue %>"
-                                       placeholder="HH:MM:SS">
+                                <div class="time-input-wrapper">
+                                    <input type="time" 
+                                           class="time-input"
+                                           name="time_<%= i %>" 
+                                           step="1"
+                                           value="<%= timeValue %>"
+                                           placeholder="HH:MM:SS">
+                                </div>
                             </td>
                         </tr>
                         <% } %>

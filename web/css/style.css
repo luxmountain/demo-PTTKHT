@@ -621,3 +621,40 @@ input[type="password"]:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
+
+/* Position & Time inputs */
+.position-input, .time-input {
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    text-align: center;
+    background: #fff;
+}
+
+.position-input {
+    width: 110px;
+}
+
+.time-input {
+    width: 170px;
+}
+
+.position-input:focus, .time-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.08);
+    background-color: #f8f9ff;
+}
+
+.time-input-wrapper, .position-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .position-input { width: 90px; }
+    .time-input { width: 140px; }
+}
