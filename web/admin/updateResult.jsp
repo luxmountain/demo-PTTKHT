@@ -101,6 +101,16 @@
                 <p><strong>Date:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></p>
                 <p><strong>Location:</strong> <%= stage.getLocation() %></p>
                 <p><strong>Total Laps:</strong> <%= stage.getTotalLaps() %></p>
+                <%
+                    String msg = request.getParameter("msg");
+                    String error = request.getParameter("error");
+                    String errorMsg = request.getParameter("errorMsg");
+                %>
+                <% if (msg != null && msg.equals("success")) { %>
+                    <p style="color: #155724; background:#d4edda; padding:8px; border-radius:4px;">Results saved and points updated successfully.</p>
+                <% } else if (error != null) { %>
+                    <p style="color: #721c24; background:#f8d7da; padding:8px; border-radius:4px;">Error: <%= (errorMsg != null ? errorMsg : "Failed to update results") %></p>
+                <% } %>
                 <p><strong>Status:</strong> <span class="badge badge-<%= statusBadge %>"><%= statusText %></span></p>
             </div>
             

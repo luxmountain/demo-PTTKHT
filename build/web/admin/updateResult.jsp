@@ -28,14 +28,14 @@
                     return false;
                 }
                 
-                // Validate that if position is entered, time should also be entered
+                // Validate that if laps is entered, time should also be entered
                 var rows = document.querySelectorAll('tbody tr');
                 for (var i = 0; i < rows.length; i++) {
-                    var position = rows[i].querySelector('input[name^="position"]').value;
+                    var laps = rows[i].querySelector('input[name^="laps"]').value;
                     var time = rows[i].querySelector('input[name^="time"]').value;
                     
-                    if (position !== '' && time === '') {
-                        alert('Please enter finish time for the racer with position ' + position);
+                    if (laps !== '' && time === '') {
+                        alert('Please enter finish time for the racer with ' + laps + ' laps completed');
                         return false;
                     }
                 }
@@ -100,6 +100,17 @@
                 <p><strong>Stage Name:</strong> <%= stage.getName() %></p>
                 <p><strong>Date:</strong> <%= stage.getDate() != null ? sdf.format(stage.getDate()) : "N/A" %></p>
                 <p><strong>Location:</strong> <%= stage.getLocation() %></p>
+                <p><strong>Total Laps:</strong> <%= stage.getTotalLaps() %></p>
+                <%
+                    String msg = request.getParameter("msg");
+                    String error = request.getParameter("error");
+                    String errorMsg = request.getParameter("errorMsg");
+                %>
+                <% if (msg != null && msg.equals("success")) { %>
+                    <p style="color: #155724; background:#d4edda; padding:8px; border-radius:4px;">Results saved and points updated successfully.</p>
+                <% } else if (error != null) { %>
+                    <p style="color: #721c24; background:#f8d7da; padding:8px; border-radius:4px;">Error: <%= (errorMsg != null ? errorMsg : "Failed to update results") %></p>
+                <% } %>
                 <p><strong>Status:</strong> <span class="badge badge-<%= statusBadge %>"><%= statusText %></span></p>
             </div>
             
@@ -120,7 +131,7 @@
                         <tr>
                             <th>Racer Name</th>
                             <th>Team</th>
-                            <th>Position</th>
+                            <th>Laps Completed</th>
                             <th>Finish Time</th>
                         </tr>
                     </thead>
@@ -133,7 +144,7 @@
                             if (result != null && result.getTimedone() != null) {
                                 timeValue = result.getTimedone().toString();
                             }
-                            Integer position = (result != null) ? result.getPosition() : null;
+                            Integer lapsCompleted = (result != null) ? result.getLapsCompleted() : null;
                         %>
                         <tr>
                             <td>
@@ -145,10 +156,11 @@
                                 <div class="position-input-wrapper">
                                     <input type="number" 
                                            class="position-input"
-                                           name="position_<%= i %>" 
-                                           min="1" 
-                                           value="<%= position != null && position > 0 ? position : "" %>"
-                                           placeholder="Position">
+                                           name="laps_<%= i %>" 
+                                           min="0" 
+                                           max="<%= stage.getTotalLaps() %>"
+                                           value="<%= lapsCompleted != null && lapsCompleted > 0 ? lapsCompleted : "" %>"
+                                           placeholder="Laps">
                                 </div>
                             </td>
                             <td>

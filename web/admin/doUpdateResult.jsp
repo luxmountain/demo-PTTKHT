@@ -4,7 +4,7 @@
     Author     : ADMIN
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8" import="model.*,dao.*,java.sql.Time" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="model.*,dao.*,java.sql.Time,java.net.URLEncoder" %>
 <%
     Member admin = (Member) session.getAttribute("admin");
     if (admin == null) {
@@ -26,6 +26,8 @@
         
         ResultDAO resultDAO = new ResultDAO();
         boolean allSuccess = true;
+        boolean hadUpdateError = false;
+        String redirectErrorMsg = null;
         
         // Get total laps for the stage
         StageDAO stageDAO = new StageDAO();
@@ -67,34 +69,52 @@
                 }
                 
                 // Calculate points based on whether racer finished the race
-                // Only award points if laps completed equals total laps
+                // Points will be calculated after all results are updated
                 Integer points = null;
-                if (lapsCompleted != null && totalLaps > 0 && lapsCompleted >= totalLaps && timedone != null) {
-                    // Points awarded based on finishing order (will be calculated after sorting by time)
-                    // For now, just mark as completed - points can be recalculated later
-                    points = 0; // Placeholder, actual points depend on final ranking
-                }
                 
                 // Update result if there's data to update
                 if (lapsCompleted != null || timedone != null) {
                     boolean success = resultDAO.updateResult(registerId, lapsCompleted, timedone, points);
                     if (!success) {
                         allSuccess = false;
+                        hadUpdateError = true;
+                        redirectErrorMsg = "Failed to update some records";
                     }
                 }
             }
         }
         
+        // After updating all results, calculate points based on finishing order
+        if (allSuccess) {
+            allSuccess = resultDAO.calculateAndUpdatePointsForStage(stageId);
+            if (!allSuccess) {
+                redirectErrorMsg = "Failed to calculate points";
+            }
+        }
+
         if (allSuccess) {
             // Redirect back to stage list with success message
             response.sendRedirect("stageList.jsp?msg=success");
         } else {
-            // Redirect back to update form with error
-            response.sendRedirect("updateResult.jsp?stageId=" + stageId + "&error=update_failed");
+            // Redirect back to update form with error and optional message
+            String errParam = "&error=update_failed";
+            if (redirectErrorMsg != null) {
+                try {
+                    errParam += "&errorMsg=" + URLEncoder.encode(redirectErrorMsg, "UTF-8");
+                } catch (Exception ex) {
+                    // ignore encoding error and send without message
+                }
+            }
+            response.sendRedirect("updateResult.jsp?stageId=" + stageId + errParam);
         }
         
     } catch (Exception e) {
         e.printStackTrace();
-        response.sendRedirect("stageList.jsp?error=exception");
+        try {
+            String em = URLEncoder.encode(e.getMessage() != null ? e.getMessage() : "internal_error", "UTF-8");
+            response.sendRedirect("updateResult.jsp?stageId=" + request.getParameter("stageId") + "&error=exception&errorMsg=" + em);
+        } catch (Exception ex) {
+            response.sendRedirect("updateResult.jsp?stageId=" + request.getParameter("stageId") + "&error=exception");
+        }
     }
 %>

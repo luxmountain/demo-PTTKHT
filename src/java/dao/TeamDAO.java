@@ -25,7 +25,7 @@ public class TeamDAO extends DAO {
         String sql = "SELECT t.id, t.name, t.nation, t.status, "
                 + "COUNT(DISTINCT r.tblStageid) as stagesParticipated, "
                 + "COALESCE(SUM(r.points), 0) as totalPoints, "
-                + "SUM(CASE WHEN r.position = 1 THEN 1 ELSE 0 END) as wins "
+                + "SUM(CASE WHEN r.points = 25 THEN 1 ELSE 0 END) as wins "
                 + "FROM tblteam t "
                 + "LEFT JOIN tblcontract c ON t.id = c.tblTeamid AND c.status = 1 "
                 + "LEFT JOIN tblregister r ON c.id = r.tblContractid AND r.status = 1 "
@@ -151,7 +151,6 @@ public class TeamDAO extends DAO {
         List<Map<String, Object>> performances = new ArrayList<>();
         
         String sql = "SELECT s.name as stageName, s.date as stageDate, "
-                + "MIN(reg.position) as bestPosition, "
                 + "SUM(reg.points) as totalPoints "
                 + "FROM tblstage s "
                 + "LEFT JOIN tblregister reg ON s.id = reg.tblStageid AND reg.status = 1 "
@@ -170,9 +169,6 @@ public class TeamDAO extends DAO {
                 Map<String, Object> performance = new HashMap<>();
                 performance.put("stageName", rs.getString("stageName"));
                 performance.put("stageDate", rs.getDate("stageDate"));
-                
-                Object bestPos = rs.getObject("bestPosition");
-                performance.put("bestPosition", bestPos != null ? rs.getInt("bestPosition") : null);
                 performance.put("totalPoints", rs.getInt("totalPoints"));
                 
                 performances.add(performance);
@@ -258,14 +254,13 @@ public class TeamDAO extends DAO {
         
         String sql = "SELECT t.id, t.name, t.nation, t.status, "
                 + "COUNT(DISTINCT r.id) as racersParticipated, "
-                + "COALESCE(SUM(r.points), 0) as totalPoints, "
-                + "MIN(r.position) as bestPosition "
+                + "COALESCE(SUM(r.points), 0) as totalPoints "
                 + "FROM tblteam t "
                 + "LEFT JOIN tblcontract c ON t.id = c.tblTeamid AND c.status = 1 "
                 + "LEFT JOIN tblregister r ON c.id = r.tblContractid AND r.status = 1 AND r.tblStageid = ? "
                 + "GROUP BY t.id, t.name, t.nation, t.status "
                 + "HAVING totalPoints > 0 "
-                + "ORDER BY totalPoints DESC, bestPosition ASC";
+                + "ORDER BY totalPoints DESC";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -281,7 +276,6 @@ public class TeamDAO extends DAO {
                 teamRanking.put("nation", rs.getString("nation"));
                 teamRanking.put("racersParticipated", rs.getInt("racersParticipated"));
                 teamRanking.put("totalPoints", rs.getInt("totalPoints"));
-                teamRanking.put("bestPosition", rs.getObject("bestPosition"));
                 teamRanking.put("status", rs.getBoolean("status"));
                 
                 rankings.add(teamRanking);
@@ -306,13 +300,13 @@ public class TeamDAO extends DAO {
         List<Map<String, Object>> racers = new ArrayList<>();
         
         String sql = "SELECT m.id, m.name, r.shirtnumber, "
-                + "reg.position, reg.timedone, reg.points "
+                + "reg.laps_completed, reg.timedone, reg.points "
                 + "FROM tblmember m "
                 + "JOIN tblracer r ON m.id = r.tblMemberid "
                 + "JOIN tblcontract c ON r.id = c.tblRacerid "
                 + "JOIN tblregister reg ON c.id = reg.tblContractid "
                 + "WHERE c.tblTeamid = ? AND reg.tblStageid = ? AND reg.status = 1 "
-                + "ORDER BY reg.position ASC";
+                + "ORDER BY reg.points DESC, reg.timedone ASC";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -325,7 +319,7 @@ public class TeamDAO extends DAO {
                 racer.put("racerId", rs.getInt("id"));
                 racer.put("racerName", rs.getString("name"));
                 racer.put("shirtNumber", rs.getInt("shirtnumber"));
-                racer.put("position", rs.getInt("position"));
+                racer.put("lapsCompleted", rs.getInt("laps_completed"));
                 racer.put("timeDone", rs.getTime("timedone"));
                 racer.put("points", rs.getInt("points"));
                 
