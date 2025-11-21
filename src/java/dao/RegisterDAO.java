@@ -54,7 +54,9 @@ public class RegisterDAO extends DAO {
                 + "INNER JOIN tblteam t ON c.tblTeamid = t.id "
                 + "INNER JOIN tblstage s ON r.tblStageid = s.id "
                 + "WHERE r.tblStageid = ? "
-                + "ORDER BY CASE WHEN r.timedone IS NULL THEN 1 ELSE 0 END, r.timedone, m.name";
+                + "ORDER BY (r.laps_completed = s.total_laps) DESC, "
+                + "CASE WHEN r.laps_completed = s.total_laps THEN r.timedone ELSE NULL END ASC, "
+                + "r.laps_completed DESC, m.name";
 
         try {
             PreparedStatement ps = con.prepareStatement(sql);

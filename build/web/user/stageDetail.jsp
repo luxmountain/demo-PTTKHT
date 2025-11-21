@@ -141,13 +141,15 @@
                         for (int i = 0; i < registers.size(); i++) {
                             Register reg = registers.get(i);
                             Result r = reg.getResult();
+                            int laps = (r != null) ? r.getLapsCompleted() : 0;
+                            int totalLapsForStage = (stage != null) ? stage.getTotalLaps() : 0;
                     %>
                     <tr>
                         <td><%= (i + 1)%></td>
                         <td><%= (reg.getContract() != null && reg.getContract().getRacer() != null) ? reg.getContract().getRacer().getName() : "N/A"%></td>
                         <td><%= (reg.getContract() != null && reg.getContract().getTeam() != null) ? reg.getContract().getTeam().getName() : "N/A"%></td>
-                        <td><%= (reg.getResult().getLapsCompleted())%></td>
-                        <td><%= (r != null && r.getTimedone() != null ? timeFormat.format(r.getTimedone()) : "N/A")%></td>
+                        <td><%= laps %></td>
+                        <td><%= (r == null ? "N/A" : (laps < totalLapsForStage ? "DNF" : (r.getTimedone() != null ? timeFormat.format(r.getTimedone()) : "N/A"))) %></td>
                     </tr>
                     <%
                             }
