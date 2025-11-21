@@ -46,11 +46,14 @@
                 Time timedone = null;
                 if (timeStr != null && !timeStr.trim().isEmpty()) {
                     try {
-                        // HTML5 time input returns HH:mm format, need to add seconds
                         if (timeStr.length() == 5) {
                             timedone = Time.valueOf(timeStr + ":00");
                         } else if (timeStr.length() == 8) {
                             timedone = Time.valueOf(timeStr);
+                        } else if (timeStr.length() == 2) {
+                            timedone = Time.valueOf(timeStr + ":00:00");
+                        } else {
+                            throw new IllegalArgumentException("Invalid time format");
                         }
                     } catch (Exception ex) {
                         // Skip invalid time format
