@@ -28,8 +28,8 @@
                     Vui lòng chọn một mùa hoặc một chặng để xem bảng xếp hạng.
                 </div>
                 <div class="navigation">
-                    <a href="seasonSelection.jsp" class="btn">Chọn Mùa</a>
-                    <a href="stageSelection.jsp" class="btn">Chọn Chặng</a>
+                    <a href="chooseSeason.jsp" class="btn">Chọn Mùa</a>
+                    <a href="chooseRace.jsp" class="btn">Chọn Chặng</a>
                     <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
                 </div>
         <%
@@ -44,7 +44,7 @@
                 if (season == null) {
         %>
                     <div class="message info">Season not found.</div>
-                    <div class="navigation"><a href="teamRanking.jsp" class="btn btn-secondary">Quay lại</a></div>
+                    <div class="navigation"><a href="chooseSeason.jsp" class="btn btn-secondary">Back</a></div>
         <%
                     return;
                 }
@@ -107,7 +107,7 @@
                 %>
 
                 <div class="navigation">
-                    <a href="teamRanking.jsp" class="btn btn-secondary">Back</a>
+                    <a href="chooseSeason.jsp" class="btn btn-secondary">Back</a>
                     <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
                 </div>
 
@@ -120,7 +120,7 @@
                 if (stage == null) {
         %>
                     <div class="message info">Stage not found.</div>
-                    <div class="navigation"><a href="stageSelection.jsp" class="btn btn-secondary">Back</a></div>
+                    <div class="navigation"><a href="chooseRace.jsp" class="btn btn-secondary">Back</a></div>
         <%
                     return;
                 }
@@ -128,7 +128,7 @@
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
         %>
 
-                <h1>Team Rankings by Stage</h1>
+                <h1>Team Rankings</h1>
                 <div class="stage-info">
                     <h2><%= stage.getName() %></h2>
                     <p><strong>Location:</strong> <%= stage.getLocation() %></p>
@@ -177,7 +177,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="teamDetailByStage.jsp?teamId=<%= team.get("teamId") %>&stageId=<%= stageId %>" class="btn">View Details</a>
+                                    <a href="teamDetail.jsp?teamId=<%= team.get("teamId") %>&stageId=<%= stageId %>" class="btn">View Details</a>
                                 </td>
                             </tr>
                             <%
@@ -194,8 +194,7 @@
                 %>
 
                 <div class="navigation">
-                    <a href="stageSelection.jsp" class="btn btn-secondary">Back to Stage Selection</a>
-                    <a href="chooseTypeRanking.jsp" class="btn btn-secondary">Back to Rankings</a>
+                    <a href="chooseRace.jsp" class="btn btn-secondary">Back</a>
                     <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
                 </div>
 

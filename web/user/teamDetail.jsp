@@ -175,7 +175,7 @@
                 </div>
 
                 <div class="navigation">
-                    <a href="teamRanking.jsp?seasonId=<%= seasonId %>" class="btn btn-secondary">Back to Rankings</a>
+                    <a href="teamRanking.jsp?seasonId=<%= seasonId %>" class="btn btn-secondary">Back to Ranking</a>
                     <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
                 </div>
 
@@ -278,8 +278,7 @@
                 </div>
 
                 <div class="navigation">
-                    <a href="teamRanking.jsp?stageId=<%= stageId %>" class="btn btn-secondary">Back to Rankings</a>
-                    <a href="stageSelection.jsp" class="btn btn-secondary">Back to Stage Selection</a>
+                    <a href="teamRanking.jsp?stageId=<%= stageId %>" class="btn btn-secondary">Back to Ranking</a>
                     <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
                 </div>
 
@@ -288,8 +287,7 @@
         %>
                 <div class="message info">No seasonId or stageId provided. Choose a ranking to view.</div>
                 <div class="navigation">
-                    <a href="seasonSelection.jsp" class="btn">Chọn Mùa</a>
-                    <a href="stageSelection.jsp" class="btn">Chọn Chặng</a>
+                    <a href="chooseTypeRanking.jsp" class="btn">Back</a>
                     <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
                 </div>
         <%

@@ -147,7 +147,7 @@
             <%
                 }
             %>
-            <a href="teamRankingBySeason.jsp?seasonId=<%= seasonId %>" class="btn btn-secondary">Back to Rankings</a>
+            <a href="teamRanking.jsp?seasonId=<%= seasonId %>" class="btn btn-secondary">Back to Ranking</a>
             <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
         </div>
     </div>
