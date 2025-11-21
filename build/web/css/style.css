@@ -1,4 +1,4 @@
-/* General Styles */
+General Styles
 * {
     margin: 0;
     padding: 0;
@@ -660,4 +660,8 @@ input[type="password"]:focus {
 @media (max-width: 768px) {
     .position-input { width: 90px; }
     .time-input { width: 140px; }
+}
+
+.stage-info{
+    margin-bottom: 0 !important;
 }

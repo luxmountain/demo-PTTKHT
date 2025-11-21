@@ -137,4 +137,46 @@ public class StageDAO extends DAO {
         
         return stages;
     }
+
+    /**
+     * Get all stages for a specific season
+     * @param seasonId the season id
+     * @return list of stages belonging to the given season
+     */
+    public List<Stage> getStagesBySeason(int seasonId) {
+        List<Stage> stages = new ArrayList<>();
+
+        String sql = "SELECT id, name, date, location, description, roadmap, total_laps, status, tblSeasonid "
+                + "FROM tblstage "
+                + "WHERE tblSeasonid = ? "
+                + "ORDER BY date DESC";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, seasonId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Stage stage = new Stage();
+                stage.setId(rs.getInt("id"));
+                stage.setName(rs.getString("name"));
+                stage.setDate(rs.getDate("date"));
+                stage.setLocation(rs.getString("location"));
+                stage.setDescription(rs.getString("description"));
+                stage.setRoadmap(rs.getString("roadmap"));
+                stage.setTotalLaps(rs.getInt("total_laps"));
+                stage.setStatus(rs.getBoolean("status"));
+                stage.setSeasonId(rs.getInt("tblSeasonid"));
+
+                stages.add(stage);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return stages;
+    }
 }

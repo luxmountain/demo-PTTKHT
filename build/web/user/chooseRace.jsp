@@ -29,46 +29,38 @@
                         </div>
                         
                         <%
-                            // Get stages for this season
-                            List<Stage> stages = stageDAO.getAllStages();
-                            boolean hasStages = false;
-                            
-                            for (Stage stage : stages) {
-                                if (stage.getSeasonId() == season.getId()) {
-                                    if (!hasStages) {
-                                        hasStages = true;
-                        %>
-                                        <ul class="stage-list">
-                        <%
-                                    }
-                        %>
-                                    <li>
-                                        <a href="teamRanking.jsp?stageId=<%= stage.getId() %>">
-                                            <div>
-                                                <div class="stage-name"><%= stage.getName() %></div>
-                                                <div class="stage-info">
-                                                    <%= stage.getLocation() %> - 
-                                                    <%= stage.getDate() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(stage.getDate()) : "No date" %>
+                                // Get stages for this season directly from DAO
+                                List<Stage> stages = stageDAO.getStagesBySeason(season.getId());
+                                if (stages != null && !stages.isEmpty()) {
+                            %>
+                                    <ul class="stage-list">
+                            <%
+                                    for (Stage stage : stages) {
+                            %>
+                                        <li>
+                                            <a href="teamRanking.jsp?stageId=<%= stage.getId() %>">
+                                                <div>
+                                                    <div class="stage-name"><%= stage.getName() %></div>
+                                                    <div class="stage-info">
+                                                        <%= stage.getLocation() %> - 
+                                                        <%= stage.getDate() != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format(stage.getDate()) : "No date" %>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div>➜</div>
-                                        </a>
-                                    </li>
-                        <%
+                                                <div>➜</div>
+                                            </a>
+                                        </li>
+                            <%
+                                    }
+                            %>
+                                    </ul>
+                            <%
+                                } else {
+                            %>
+                                    <div class="message info">
+                                        No stages in this season.
+                                    </div>
+                            <%
                                 }
-                            }
-                            
-                            if (hasStages) {
-                        %>
-                                        </ul>
-                        <%
-                            } else {
-                        %>
-                                <div class="message info">
-                                    No stages in this season.
-                                </div>
-                        <%
-                            }
                         %>
                     </div>
         <%

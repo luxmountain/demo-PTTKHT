@@ -18,14 +18,12 @@
                     <input type="radio" name="viewType" value="season" checked>
                     <div class="option-icon">🏆</div>
                     <div class="option-title">View by Season</div>
-                    <div class="option-description">View season-wide rankings</div>
                 </div>
                 
                 <div class="option-card" onclick="selectOption('stage', this)">
                     <input type="radio" name="viewType" value="stage">
                     <div class="option-icon">🚴</div>
                     <div class="option-title">View by Stage</div>
-                    <div class="option-description">View rankings for a specific stage</div>
                 </div>
             </div>
 
