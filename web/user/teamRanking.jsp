@@ -133,17 +133,7 @@
                         <tr>
                             <th>Rank</th>
                             <th>Team Name</th>
-                            <% if (isSeason) { %>
-                                <th>Stages Participated</th>
-                                <th>Points</th>
-                                <th>Stage Wins</th>
-                            <% } else { %>
-                                <th>Country</th>
-                                <th>Racers Participated</th>
-                                <th>Best Position</th>
-                                <th>Total Points</th>
-                            <% } %>
-                            <th>Status</th>
+                            <th>Total Points</th>
                             <th>Options</th>
                         </tr>
                     </thead>
@@ -155,17 +145,7 @@
                         <tr class="<%= rowClass %>">
                             <td><strong><%= rank %></strong></td>
                             <td><%= team.get("teamName") %></td>
-                            <% if (isSeason) { %>
-                                <td><%= team.get("stagesParticipated") %></td>
-                                <td><%= team.get("totalPoints") %></td>
-                                <td><%= team.get("wins") %></td>
-                            <% } else { %>
-                                <td><%= team.get("nation") %></td>
-                                <td><%= team.get("racersParticipated") %></td>
-                                <td><%= formatValue(team.get("bestPosition")) %></td>
-                                <td><%= team.get("totalPoints") %></td>
-                            <% } %>
-                            <td><%= renderStatusBadge((Boolean) team.get("status")) %></td>
+                            <td><%= team.get("totalPoints") %></td>
                             <td>
                                 <a href="teamDetail.jsp?teamId=<%= team.get("teamId") %>&<%= detailUrlParam %>" class="btn">View Details</a>
                             </td>
