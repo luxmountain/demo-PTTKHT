@@ -42,8 +42,8 @@
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
             
             // Load registers & results for this stage
-            ResultDAO resultDAO = new ResultDAO();
-            List<Register> registers = resultDAO.getRegistersByStage(stageId);
+            RegisterDAO registerDAO = new RegisterDAO();
+            List<Register> registers = registerDAO.getRegistersByStage(stageId);
         %>
         
         <div class="container">

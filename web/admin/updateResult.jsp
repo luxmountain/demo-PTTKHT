@@ -68,8 +68,8 @@
                 return;
             }
             
-            ResultDAO resultDAO = new ResultDAO();
-            List<Register> registers = resultDAO.getRegistersByStage(stageId);
+            RegisterDAO registerDAO = new RegisterDAO();
+            List<Register> registers = registerDAO.getRegistersByStage(stageId);
             
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date today = new Date();
