@@ -51,6 +51,7 @@
                             <th>Date</th>
                             <th>Location</th>
                             <th>Status</th>
+                            <th>Total Laps</th>
                             <th>Option</th>
                         </tr>
                     </thead>
@@ -68,6 +69,7 @@
                             <td><%= formattedDate %></td>
                             <td><%= stage.getLocation() != null ? stage.getLocation() : "N/A" %></td>
                             <td><%= stage.isStatus() ? "Active" : "Inactive" %></td>
+                            <td><%= stage.getTotalLaps() %></td>
                             <td>
                                 <a href="stageDetail.jsp?id=<%= stage.getId() %>" class="view-detail-btn">View Detail</a>
                             </td>

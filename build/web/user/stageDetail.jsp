@@ -21,7 +21,7 @@
             }
 
             String stageIdParam = request.getParameter("id");
-            
+
             if (stageIdParam == null || stageIdParam.trim().isEmpty()) {
                 response.sendRedirect("searchStage.jsp?error=invalid");
                 return;
@@ -37,119 +37,126 @@
 
             StageDAO stageDAO = new StageDAO();
             Stage stage = stageDAO.getStageInfo(stageId);
-            
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-            
+
             // Load registers & results for this stage
             RegisterDAO registerDAO = new RegisterDAO();
             List<Register> registers = registerDAO.getRegistersByStage(stageId);
         %>
-        
+
         <div class="container">
             <%
                 if (stage == null) {
             %>
-                <div class="card">
-                    <h3>Race Not Found</h3>
-                    <p>The requested race (ID: <%= stageId %>) could not be found.</p>
-                </div>
+            <div class="card">
+                <h3>Race Not Found</h3>
+                <p>The requested race (ID: <%= stageId%>) could not be found.</p>
+            </div>
             <%
-                } else {
+            } else {
             %>
-                <h1>Detail Race</h1>
-                
-                <div class="card">
-                    <h2><%= stage.getName() %></h2>
-                    
-                    <div class="detail-section">
+            <h1>Detail Race</h1>
+
+            <div class="card">
+                <h2><%= stage.getName()%></h2>
+
+                <div class="detail-section">
                     <div class="detail-row">
                         <span class="detail-label">Race name:</span>
-                        <span class="detail-value"><%= stage.getName() %></span>
+                        <span class="detail-value"><%= stage.getName()%></span>
                     </div>
-                    
+
                     <div class="detail-row">
                         <span class="detail-label">Date:</span>
                         <span class="detail-value">
-                            <%= stage.getDate() != null ? dateFormat.format(stage.getDate()) : "N/A" %>
+                            <%= stage.getDate() != null ? dateFormat.format(stage.getDate()) : "N/A"%>
                         </span>
                     </div>
-                    
+
                     <div class="detail-row">
                         <span class="detail-label">Location:</span>
                         <span class="detail-value">
-                            <%= stage.getLocation() != null ? stage.getLocation() : "N/A" %>
+                            <%= stage.getLocation() != null ? stage.getLocation() : "N/A"%>
                         </span>
                     </div>
-                    
+
                     <div class="detail-row">
                         <span class="detail-label">Status:</span>
                         <span class="detail-value">
-                            <%= stage.isStatus() ? "Active" : "Inactive" %>
+                            <%= stage.isStatus() ? "Active" : "Inactive"%>
                         </span>
                     </div>
-                    
+
+                    <div class="detail-row">
+                        <span class="detail-label">Total Laps:</span>
+                        <span class="detail-value">
+                            <%= stage.getTotalLaps()%>
+                        </span>
+                    </div>
+
                     <div class="detail-row">
                         <span class="detail-label">Description:</span>
                         <span class="detail-value">
-                            <%= stage.getDescription() != null ? stage.getDescription() : "N/A" %>
+                            <%= stage.getDescription() != null ? stage.getDescription() : "N/A"%>
                         </span>
                     </div>
-                    
+
                     <div class="detail-row">
                         <span class="detail-label">Number of drivers:</span>
-                        <span class="detail-value"><%= registers != null ? registers.size() : 0 %></span>
+                        <span class="detail-value"><%= registers != null ? registers.size() : 0%></span>
                     </div>
-                    
+
                     <div class="detail-row">
                         <span class="detail-label">Route:</span>
                         <span class="detail-value">
-                            <%= stage.getRoadmap() != null ? stage.getRoadmap() : "N/A" %>
+                            <%= stage.getRoadmap() != null ? stage.getRoadmap() : "N/A"%>
                         </span>
                     </div>
-                    </div>
                 </div>
-                
-                <h2>Result</h2>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Driver Name</th>
-                            <th>Team</th>
-                            <th>Finish Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                            if (registers == null || registers.isEmpty()) {
-                        %>
-                        <tr>
-                            <td colspan="4" style="text-align: center; color: #999;">No results available</td>
-                        </tr>
-                        <%
-                            } else {
-                                for (int i = 0; i < registers.size(); i++) {
-                                    Register reg = registers.get(i);
-                                    Result r = reg.getResult();
-                        %>
-                        <tr>
-                            <td><%= (i + 1) %></td>
-                            <td><%= (reg.getContract() != null && reg.getContract().getRacer() != null) ? reg.getContract().getRacer().getName() : "N/A" %></td>
-                            <td><%= (reg.getContract() != null && reg.getContract().getTeam() != null) ? reg.getContract().getTeam().getName() : "N/A" %></td>
-                            <td><%= (r != null && r.getTimedone() != null ? timeFormat.format(r.getTimedone()) : "N/A") %></td>
-                        </tr>
-                        <%
-                                }
+            </div>
+
+            <h2>Result</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Driver Name</th>
+                        <th>Team</th>
+                        <th>Finish Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        if (registers == null || registers.isEmpty()) {
+                    %>
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #999;">No results available</td>
+                    </tr>
+                    <%
+                    } else {
+                        for (int i = 0; i < registers.size(); i++) {
+                            Register reg = registers.get(i);
+                            Result r = reg.getResult();
+                    %>
+                    <tr>
+                        <td><%= (i + 1)%></td>
+                        <td><%= (reg.getContract() != null && reg.getContract().getRacer() != null) ? reg.getContract().getRacer().getName() : "N/A"%></td>
+                        <td><%= (reg.getContract() != null && reg.getContract().getTeam() != null) ? reg.getContract().getTeam().getName() : "N/A"%></td>
+                        <td><%= (r != null && r.getTimedone() != null ? timeFormat.format(r.getTimedone()) : "N/A")%></td>
+                    </tr>
+                    <%
                             }
-                        %>
-                    </tbody>
-                </table>
+                        }
+                    %>
+                </tbody>
+            </table>
             <%
                 }
             %>
-            
+
             <div class="button-group">
                 <a href="stageListSearch.jsp" class="back-button">Back</a>
             </div>
