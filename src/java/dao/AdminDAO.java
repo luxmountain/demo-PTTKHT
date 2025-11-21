@@ -12,10 +12,9 @@ public class AdminDAO extends DAO {
 
     public Admin getAdminInfo(int memberId) {
         Admin admin = null;
-        String sql = "SELECT m.id, m.username, m.name, m.password, m.dob, m.address, m.email, m.phonenumber "
-                + "FROM tbladmin a "
-                + "INNER JOIN tblmember m ON a.tblMemberid = m.id "
-                + "WHERE m.id = ?";
+        String sql = "SELECT id, username, name, password, dob, address, email, phonenumber "
+            + "FROM tblmember "
+            + "WHERE id = ?";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);

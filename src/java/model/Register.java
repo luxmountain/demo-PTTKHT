@@ -14,13 +14,9 @@ public class Register {
     private int id;
     private Date dateRegistered;
     private boolean status;
-    private int contractId;
-    private int stageId;
+    private Contract contract;
+    private Stage stage;
     private Result result;
-    
-    // For display purposes
-    private String racerName;
-    private String teamName;
 
     public int getId() {
         return id;
@@ -46,20 +42,20 @@ public class Register {
         this.status = status;
     }
 
-    public int getContractId() {
-        return contractId;
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setContractId(int contractId) {
-        this.contractId = contractId;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
-    public int getStageId() {
-        return stageId;
+    public Stage getStage() {
+        return stage;
     }
 
-    public void setStageId(int stageId) {
-        this.stageId = stageId;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public Result getResult() {
@@ -68,21 +64,5 @@ public class Register {
 
     public void setResult(Result result) {
         this.result = result;
-    }
-
-    public String getRacerName() {
-        return racerName;
-    }
-
-    public void setRacerName(String racerName) {
-        this.racerName = racerName;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
     }
 }

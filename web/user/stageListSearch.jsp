@@ -64,7 +64,7 @@
                         %>
                         <tr>
                             <td><%= no++ %></td>
-                            <td><%= stage.getName() %></td>
+                            <td><%= stage  .getName() %></td>
                             <td><%= formattedDate %></td>
                             <td><%= stage.getLocation() != null ? stage.getLocation() : "N/A" %></td>
                             <td><%= stage.isStatus() ? "Active" : "Inactive" %></td>

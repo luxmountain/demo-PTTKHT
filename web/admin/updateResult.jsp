@@ -137,10 +137,10 @@
                         %>
                         <tr>
                             <td>
-                                <%= register.getRacerName() %>
+                                <%= (register.getContract() != null && register.getContract().getRacer() != null) ? register.getContract().getRacer().getName() : "N/A" %>
                                 <input type="hidden" name="registerId_<%= i %>" value="<%= register.getId() %>">
                             </td>
-                            <td><%= register.getTeamName() %></td>
+                            <td><%= (register.getContract() != null && register.getContract().getTeam() != null) ? register.getContract().getTeam().getName() : "N/A" %></td>
                             <td>
                                 <input type="number" 
                                        name="position_<%= i %>" 

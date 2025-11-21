@@ -19,7 +19,9 @@
 
     if (authenticatedMember != null) {
         if (session != null) {
+            // Remove old session
             session.invalidate();
+            // Return a new session with new ID
             session = request.getSession(true);
         }
 

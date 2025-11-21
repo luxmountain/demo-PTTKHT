@@ -29,11 +29,9 @@
             <div class="menu-grid">
                 <a href="searchStage.jsp" class="menu-card">
                     <h3>Search Race</h3>
-                    <p>Search race information</p>
                 </a>
 <!--                <a href="teamRanking.jsp" class="menu-card">
                     <h3>Team Rankings</h3>
-                    <p>View team rankings</p>
                 </a>-->
             </div>
 

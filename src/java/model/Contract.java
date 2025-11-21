@@ -16,8 +16,8 @@ public class Contract {
     private Date startdate;
     private Date enddate;
     private boolean status;
-    private int racerId;
-    private int teamId;
+    private Racer racer;
+    private Team team;
 
     public int getId() {
         return id;
@@ -59,19 +59,19 @@ public class Contract {
         this.status = status;
     }
 
-    public int getRacerId() {
-        return racerId;
+    public Racer getRacer() {
+        return racer;
     }
 
-    public void setRacerId(int racerId) {
-        this.racerId = racerId;
+    public void setRacer(Racer racer) {
+        this.racer = racer;
     }
 
-    public int getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

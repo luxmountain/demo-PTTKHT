@@ -12,10 +12,9 @@ public class UserDAO extends DAO {
 
     public User getUserInfo(int memberId) {
         User user = null;
-        String sql = "SELECT m.id, m.username, m.name, m.password, m.dob, m.address, m.email, m.phonenumber "
-                + "FROM tbluser u "
-                + "INNER JOIN tblmember m ON u.tblMemberid = m.id "
-                + "WHERE m.id = ?";
+        String sql = "SELECT id, username, name, password, dob, address, email, phonenumber "
+            + "FROM tblmember "
+            + "WHERE id = ?";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
