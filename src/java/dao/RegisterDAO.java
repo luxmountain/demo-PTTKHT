@@ -1,7 +1,5 @@
 package dao;
 
-
-import static dao.DAO.con;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
@@ -19,20 +17,26 @@ import model.Result;
  *
  * @author ADMIN
  */
-public class RegisterDAO {
+public class RegisterDAO extends DAO {
+
+    public RegisterDAO() {
+        super();
+    }
+
     /**
      * Get all racers registered for a specific stage with their current results
+     * 
      * @param stageId the stage ID
      * @return list of Register objects with Result data
      */
     public List<Register> getRegistersByStage(int stageId) {
         List<Register> registers = new ArrayList<>();
-        
+
         String sql = "SELECT r.id as register_id, r.dateregistered, r.status, "
                 + "r.tblContractid as contract_id, r.tblStageid as stage_id, "
                 + "m.id as racer_id, m.name as racer_name, m.username as racer_username, "
                 + "m.password as racer_password, m.dob as racer_dob, m.address as racer_address, "
-                + "m.email as racer_email, m.phonenumber as racer_phone, m.role as racer_role, "
+                + "m.email as racer_email, m.phonenumber as racer_phone, "
                 + "ra.nationality, ra.shirtnumber, ra.status as racer_status, "
                 + "t.id as team_id, t.name as team_name, t.description as team_desc, "
                 + "t.nation as team_nation, t.totalpoints, t.status as team_status, "
@@ -47,19 +51,19 @@ public class RegisterDAO {
                 + "INNER JOIN tblstage s ON r.tblStageid = s.id "
                 + "WHERE r.tblStageid = ? "
                 + "ORDER BY CASE WHEN r.timedone IS NULL THEN 1 ELSE 0 END, r.timedone, m.name";
-        
+
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, stageId);
-            
+
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 Register register = new Register();
                 register.setId(rs.getInt("register_id"));
                 register.setDateRegistered(rs.getDate("dateregistered"));
                 register.setStatus(rs.getBoolean("status"));
-                
+
                 // Create Racer object
                 model.Racer racer = new model.Racer();
                 racer.setId(rs.getInt("racer_id"));
@@ -70,11 +74,10 @@ public class RegisterDAO {
                 racer.setAddress(rs.getString("racer_address"));
                 racer.setEmail(rs.getString("racer_email"));
                 racer.setPhonenumber(rs.getString("racer_phone"));
-                racer.setRole(rs.getString("racer_role"));
                 racer.setNationality(rs.getString("nationality"));
                 racer.setShirtnumber(rs.getInt("shirtnumber"));
                 racer.setStatus(rs.getBoolean("racer_status"));
-                
+
                 // Create Team object
                 model.Team team = new model.Team();
                 team.setId(rs.getInt("team_id"));
@@ -83,7 +86,7 @@ public class RegisterDAO {
                 team.setNation(rs.getString("team_nation"));
                 team.setTotalpoints(rs.getInt("totalpoints"));
                 team.setStatus(rs.getBoolean("team_status"));
-                
+
                 // Create and set Contract object
                 model.Contract contract = new model.Contract();
                 contract.setId(rs.getInt("contract_id"));
@@ -94,7 +97,7 @@ public class RegisterDAO {
                 contract.setRacer(racer);
                 contract.setTeam(team);
                 register.setContract(contract);
-                
+
                 // Create and set Stage object
                 model.Stage stage = new model.Stage();
                 stage.setId(rs.getInt("stage_id"));
@@ -106,33 +109,33 @@ public class RegisterDAO {
                 stage.setStatus(rs.getBoolean("stage_status"));
                 stage.setSeasonId(rs.getInt("tblSeasonid"));
                 register.setStage(stage);
-                
+
                 // Create and set Result object
                 Result result = new Result();
-                
+
                 int position = rs.getInt("position");
                 if (!rs.wasNull()) {
                     result.setPosition(position);
                 }
-                
+
                 Time timedone = rs.getTime("timedone");
                 result.setTimedone(timedone);
-                
+
                 int points = rs.getInt("points");
                 if (!rs.wasNull()) {
                     result.setPoints(points);
                 }
-                
+
                 register.setResult(result);
                 registers.add(register);
             }
-            
+
             rs.close();
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return registers;
     }
 }
