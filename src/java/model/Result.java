@@ -13,7 +13,6 @@ import java.sql.Time;
 public class Result {
     private int id;
     private int lapsCompleted;
-    private int points;
     private Time timedone;
 
     public int getId() {
@@ -30,14 +29,6 @@ public class Result {
 
     public void setLapsCompleted(int lapsCompleted) {
         this.lapsCompleted = lapsCompleted;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public Time getTimedone() {

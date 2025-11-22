@@ -3,8 +3,6 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * DAO for managing race results
@@ -21,11 +19,11 @@ public class ResultDAO extends DAO {
      * @param registerId the register ID
      * @param lapsCompleted the number of laps completed
      * @param timedone the completion time
-     * @param points the points earned
+     * @param points the points earned (deprecated - not used, stats calculated separately)
      * @return true if successful
      */
     public boolean updateResult(int registerId, Integer lapsCompleted, Time timedone, Integer points) {
-        String sql = "UPDATE tblregister SET laps_completed = ?, timedone = ?, points = ? WHERE id = ?";
+        String sql = "UPDATE tblregister SET laps_completed = ?, timedone = ? WHERE id = ?";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -42,13 +40,7 @@ public class ResultDAO extends DAO {
                 ps.setNull(2, java.sql.Types.TIME);
             }
             
-            if (points != null) {
-                ps.setInt(3, points);
-            } else {
-                ps.setNull(3, java.sql.Types.INTEGER);
-            }
-            
-            ps.setInt(4, registerId);
+            ps.setInt(3, registerId);
             
             int rowsAffected = ps.executeUpdate();
             ps.close();
@@ -61,8 +53,8 @@ public class ResultDAO extends DAO {
     }
     
     /**
-     * Calculate and update points for all racers in a stage based on finishing position
-     * Only racers who completed all laps get points
+     * Calculate and update team statistics for a stage
+     * Updates tblstatteaminstage and tblstatteaminseason tables
      * Points system: 1st=25, 2nd=18, 3rd=15, 4th=12, 5th=10, 6th=8, 7th=6, 8th=4, 9th=2, 10th=1
      * 
      * @param stageId the stage ID
@@ -70,63 +62,138 @@ public class ResultDAO extends DAO {
      */
     public boolean calculateAndUpdatePointsForStage(int stageId) {
         try {
-            // First, get total laps for this stage
-            String sqlGetLaps = "SELECT total_laps FROM tblstage WHERE id = ?";
-            PreparedStatement psGetLaps = con.prepareStatement(sqlGetLaps);
-            psGetLaps.setInt(1, stageId);
-            ResultSet rsLaps = psGetLaps.executeQuery();
+            // Get stage info (total laps and season id)
+            String sqlGetStage = "SELECT total_laps, tblSeasonid FROM tblstage WHERE id = ?";
+            PreparedStatement psGetStage = con.prepareStatement(sqlGetStage);
+            psGetStage.setInt(1, stageId);
+            ResultSet rsStage = psGetStage.executeQuery();
             
             int totalLaps = 0;
-            if (rsLaps.next()) {
-                totalLaps = rsLaps.getInt("total_laps");
+            int seasonId = 0;
+            if (rsStage.next()) {
+                totalLaps = rsStage.getInt("total_laps");
+                seasonId = rsStage.getInt("tblSeasonid");
             }
-            rsLaps.close();
-            psGetLaps.close();
+            rsStage.close();
+            psGetStage.close();
             
-            // Get all registers for this stage who completed all laps, ordered by time
-            String sqlGetFinishers = "SELECT id FROM tblregister "
-                    + "WHERE tblStageid = ? AND laps_completed >= ? AND timedone IS NOT NULL "
-                    + "ORDER BY timedone ASC";
-            
-            PreparedStatement psGetFinishers = con.prepareStatement(sqlGetFinishers);
-            psGetFinishers.setInt(1, stageId);
-            psGetFinishers.setInt(2, totalLaps);
-            ResultSet rsFinishers = psGetFinishers.executeQuery();
-            
-            // Points system
-            int[] pointsTable = {25, 18, 15, 12, 10, 8, 6, 4, 2, 1};
-            
-            List<Integer> finisherIds = new ArrayList<>();
-            while (rsFinishers.next()) {
-                finisherIds.add(rsFinishers.getInt("id"));
+            if (totalLaps == 0 || seasonId == 0) {
+                return false;
             }
-            rsFinishers.close();
-            psGetFinishers.close();
             
-            // Update points for finishers
-            String sqlUpdatePoints = "UPDATE tblregister SET points = ? WHERE id = ?";
-            PreparedStatement psUpdatePoints = con.prepareStatement(sqlUpdatePoints);
+            // Update team stats for this stage
+            updateTeamStatsForStage(stageId, totalLaps);
             
-            for (int i = 0; i < finisherIds.size(); i++) {
-                int points = 0;
-                if (i < pointsTable.length) {
-                    points = pointsTable[i];
-                }
-                
-                psUpdatePoints.setInt(1, points);
-                psUpdatePoints.setInt(2, finisherIds.get(i));
-                psUpdatePoints.executeUpdate();
-            }
-            psUpdatePoints.close();
+            // Update team stats for the entire season
+            updateTeamStatsForSeason(seasonId);
             
-            // Set points to 0 for DNF racers (didn't complete all laps)
-            String sqlResetDNF = "UPDATE tblregister SET points = 0 "
-                    + "WHERE tblStageid = ? AND (laps_completed < ? OR timedone IS NULL)";
-            PreparedStatement psResetDNF = con.prepareStatement(sqlResetDNF);
-            psResetDNF.setInt(1, stageId);
-            psResetDNF.setInt(2, totalLaps);
-            psResetDNF.executeUpdate();
-            psResetDNF.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
+     * Update team statistics for a specific stage
+     * Calculates points based on racers' finishing positions and updates tblstatteaminstage
+     * 
+     * @param stageId the stage ID
+     * @param totalLaps the total laps for this stage
+     * @return true if successful
+     */
+    private boolean updateTeamStatsForStage(int stageId, int totalLaps) {
+        try {
+            // Delete existing stats for this stage
+            String sqlDelete = "DELETE FROM tblstatteaminstage WHERE tblStageid = ?";
+            PreparedStatement psDelete = con.prepareStatement(sqlDelete);
+            psDelete.setInt(1, stageId);
+            psDelete.executeUpdate();
+            psDelete.close();
+            
+                // Calculate team points for this stage
+                // For each team, sum points of their racers based on finishing position
+                // Insert only tblTeamid, tblStageid, totalpoints — ranking is computed at query time
+                String sqlInsert = "INSERT INTO tblstatteaminstage (tblTeamid, tblStageid, totalpoints) "
+                    + "SELECT team_points.tblTeamid, ?, SUM(team_points.points) as totalpoints "
+                    + "FROM ( "
+                    + "  SELECT c.tblTeamid, "
+                    + "    CASE "
+                    + "      WHEN r.laps_completed >= ? AND r.timedone IS NOT NULL THEN "
+                    + "        CASE racer_rank "
+                    + "          WHEN 1 THEN 25 "
+                    + "          WHEN 2 THEN 18 "
+                    + "          WHEN 3 THEN 15 "
+                    + "          WHEN 4 THEN 12 "
+                    + "          WHEN 5 THEN 10 "
+                    + "          WHEN 6 THEN 8 "
+                    + "          WHEN 7 THEN 6 "
+                    + "          WHEN 8 THEN 4 "
+                    + "          WHEN 9 THEN 2 "
+                    + "          WHEN 10 THEN 1 "
+                    + "          ELSE 0 "
+                    + "        END "
+                    + "      ELSE 0 "
+                    + "    END as points "
+                    + "  FROM tblregister r "
+                    + "  JOIN tblcontract c ON r.tblContractid = c.id "
+                    + "  LEFT JOIN ( "
+                    + "    SELECT id, RANK() OVER (ORDER BY timedone ASC) as racer_rank "
+                    + "    FROM tblregister "
+                    + "    WHERE tblStageid = ? AND laps_completed >= ? AND timedone IS NOT NULL "
+                    + "  ) ranked ON r.id = ranked.id "
+                    + "  WHERE r.tblStageid = ? AND r.status = 1 "
+                    + ") team_points "
+                    + "GROUP BY team_points.tblTeamid "
+                    + "HAVING totalpoints > 0";
+
+                PreparedStatement psInsert = con.prepareStatement(sqlInsert);
+                psInsert.setInt(1, stageId);
+                psInsert.setInt(2, totalLaps);
+                psInsert.setInt(3, stageId);
+                psInsert.setInt(4, totalLaps);
+                psInsert.setInt(5, stageId);
+                psInsert.executeUpdate();
+                psInsert.close();
+            
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
+     * Update team statistics for an entire season
+     * Aggregates points from all stages in the season and updates tblstatteaminseason
+     * 
+     * @param seasonId the season ID
+     * @return true if successful
+     */
+    private boolean updateTeamStatsForSeason(int seasonId) {
+        try {
+            // Delete existing stats for this season
+            String sqlDelete = "DELETE FROM tblstatteaminseason WHERE tblSeasonid = ?";
+            PreparedStatement psDelete = con.prepareStatement(sqlDelete);
+            psDelete.setInt(1, seasonId);
+            psDelete.executeUpdate();
+            psDelete.close();
+            
+                // Calculate season stats by aggregating stage stats
+                // Insert only totalpoints per team for the season; ranking computed during query
+                String sqlInsert = "INSERT INTO tblstatteaminseason (tblTeamid, tblSeasonid, totalpoints) "
+                    + "SELECT sts.tblTeamid, ?, SUM(sts.totalpoints) as totalpoints "
+                    + "FROM tblstatteaminstage sts "
+                    + "JOIN tblstage s ON sts.tblStageid = s.id "
+                    + "WHERE s.tblSeasonid = ? "
+                    + "GROUP BY sts.tblTeamid "
+                    + "HAVING totalpoints > 0";
+
+                PreparedStatement psInsert = con.prepareStatement(sqlInsert);
+                psInsert.setInt(1, seasonId);
+                psInsert.setInt(2, seasonId);
+                psInsert.executeUpdate();
+                psInsert.close();
             
             return true;
         } catch (Exception e) {

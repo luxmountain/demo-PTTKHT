@@ -16,6 +16,7 @@ public class TeamDAO extends DAO {
 
     /**
      * Get team rankings by season
+     * Reads from tblstatteaminseason table
      * @param seasonId the season ID
      * @return list of teams with their rankings
      */
@@ -23,22 +24,22 @@ public class TeamDAO extends DAO {
         List<Map<String, Object>> rankings = new ArrayList<>();
         
         String sql = "SELECT t.id, t.name, t.nation, t.status, "
-                + "COUNT(DISTINCT r.tblStageid) as stagesParticipated, "
-                + "COALESCE(SUM(r.points), 0) as totalPoints, "
-                + "SUM(CASE WHEN r.points = 25 THEN 1 ELSE 0 END) as wins "
+                + "COALESCE(sts.totalpoints, 0) as totalPoints, "
+                + "COUNT(DISTINCT stg_sts.tblStageid) as stagesParticipated "
                 + "FROM tblteam t "
-                + "LEFT JOIN tblcontract c ON t.id = c.tblTeamid AND c.status = 1 "
-                + "LEFT JOIN tblregister r ON c.id = r.tblContractid AND r.status = 1 "
-                + "LEFT JOIN tblstage s ON r.tblStageid = s.id "
-                + "WHERE s.tblSeasonid = ? OR s.tblSeasonid IS NULL "
-                + "GROUP BY t.id, t.name, t.nation, t.status "
-                + "ORDER BY totalPoints DESC, wins DESC";
-        
+                + "LEFT JOIN tblstatteaminseason sts ON t.id = sts.tblTeamid AND sts.tblSeasonid = ? "
+                + "LEFT JOIN tblstage s ON s.tblSeasonid = ? "
+                + "LEFT JOIN tblstatteaminstage stg_sts ON t.id = stg_sts.tblTeamid AND s.id = stg_sts.tblStageid "
+                + "WHERE sts.totalpoints IS NOT NULL OR stg_sts.totalpoints IS NOT NULL "
+                + "GROUP BY t.id, t.name, t.nation, t.status, sts.totalpoints "
+                + "ORDER BY totalPoints DESC";
+
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, seasonId);
+            ps.setInt(2, seasonId);
             ResultSet rs = ps.executeQuery();
-            
+
             int rank = 1;
             while (rs.next()) {
                 Map<String, Object> teamRanking = new HashMap<>();
@@ -48,18 +49,17 @@ public class TeamDAO extends DAO {
                 teamRanking.put("nation", rs.getString("nation"));
                 teamRanking.put("stagesParticipated", rs.getInt("stagesParticipated"));
                 teamRanking.put("totalPoints", rs.getInt("totalPoints"));
-                teamRanking.put("wins", rs.getInt("wins"));
                 teamRanking.put("status", rs.getBoolean("status"));
-                
+
                 rankings.add(teamRanking);
             }
-            
+
             rs.close();
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return rankings;
     }
 
@@ -185,6 +185,7 @@ public class TeamDAO extends DAO {
 
     /**
      * Get team's total points and rank in a season
+     * Reads from tblstatteaminseason table
      * @param teamId the team ID
      * @param seasonId the season ID
      * @return map with totalPoints and rank
@@ -192,60 +193,51 @@ public class TeamDAO extends DAO {
     public Map<String, Object> getTeamSeasonStats(int teamId, int seasonId) {
         Map<String, Object> stats = new HashMap<>();
         
-        // Get total points
-        String sql1 = "SELECT COALESCE(SUM(reg.points), 0) as totalPoints "
-                + "FROM tblregister reg "
-                + "JOIN tblcontract c ON reg.tblContractid = c.id "
-                + "JOIN tblstage s ON reg.tblStageid = s.id "
-                + "WHERE c.tblTeamid = ? AND s.tblSeasonid = ? AND reg.status = 1";
-        
         try {
-            PreparedStatement ps1 = con.prepareStatement(sql1);
-            ps1.setInt(1, teamId);
-            ps1.setInt(2, seasonId);
-            ResultSet rs1 = ps1.executeQuery();
-            
-            if (rs1.next()) {
-                stats.put("totalPoints", rs1.getInt("totalPoints"));
+            // Get total points from stat table if present
+            String sqlPoints = "SELECT COALESCE(totalpoints, 0) as totalPoints "
+                    + "FROM tblstatteaminseason WHERE tblTeamid = ? AND tblSeasonid = ?";
+            PreparedStatement psPoints = con.prepareStatement(sqlPoints);
+            psPoints.setInt(1, teamId);
+            psPoints.setInt(2, seasonId);
+            ResultSet rsPoints = psPoints.executeQuery();
+            int totalPoints = 0;
+            if (rsPoints.next()) {
+                totalPoints = rsPoints.getInt("totalPoints");
             }
-            rs1.close();
-            ps1.close();
-            
-            // Get rank - find position among all teams in the season
-            String sql2 = "SELECT team_rank FROM ( "
-                    + "SELECT c.tblTeamid, "
-                    + "RANK() OVER (ORDER BY SUM(reg.points) DESC) as team_rank "
-                    + "FROM tblregister reg "
-                    + "JOIN tblcontract c ON reg.tblContractid = c.id "
-                    + "JOIN tblstage s ON reg.tblStageid = s.id "
-                    + "WHERE s.tblSeasonid = ? AND reg.status = 1 "
-                    + "GROUP BY c.tblTeamid "
-                    + ") ranked_teams "
-                    + "WHERE tblTeamid = ?";
-            
-            PreparedStatement ps2 = con.prepareStatement(sql2);
-            ps2.setInt(1, seasonId);
-            ps2.setInt(2, teamId);
-            ResultSet rs2 = ps2.executeQuery();
-            
-            if (rs2.next()) {
-                stats.put("rank", rs2.getInt("team_rank"));
+            rsPoints.close();
+            psPoints.close();
+
+            stats.put("totalPoints", totalPoints);
+
+            // Compute rank: count how many teams have more points in the same season
+            if (totalPoints > 0) {
+                String sqlRank = "SELECT COUNT(*) as higher FROM tblstatteaminseason WHERE tblSeasonid = ? AND totalpoints > ?";
+                PreparedStatement psRank = con.prepareStatement(sqlRank);
+                psRank.setInt(1, seasonId);
+                psRank.setInt(2, totalPoints);
+                ResultSet rsRank = psRank.executeQuery();
+                int higher = 0;
+                if (rsRank.next()) higher = rsRank.getInt("higher");
+                rsRank.close();
+                psRank.close();
+
+                stats.put("rank", higher + 1);
             } else {
-                // If team has no data in this season, set rank as N/A
                 stats.put("rank", 0);
             }
-            rs2.close();
-            ps2.close();
-            
         } catch (Exception e) {
             e.printStackTrace();
+            stats.put("totalPoints", 0);
+            stats.put("rank", 0);
         }
-        
+
         return stats;
     }
 
     /**
      * Get team rankings by stage
+     * Reads from tblstatteaminstage table
      * @param stageId the stage ID
      * @return list of teams with their rankings in that stage
      */
@@ -253,20 +245,30 @@ public class TeamDAO extends DAO {
         List<Map<String, Object>> rankings = new ArrayList<>();
         
         String sql = "SELECT t.id, t.name, t.nation, t.status, "
+                + "COALESCE(sts.totalpoints, 0) as totalPoints, "
                 + "COUNT(DISTINCT r.id) as racersParticipated, "
-                + "COALESCE(SUM(r.points), 0) as totalPoints "
+                + "MIN(ranked.position) as bestPosition "
                 + "FROM tblteam t "
+                + "LEFT JOIN tblstatteaminstage sts ON t.id = sts.tblTeamid AND sts.tblStageid = ? "
                 + "LEFT JOIN tblcontract c ON t.id = c.tblTeamid AND c.status = 1 "
                 + "LEFT JOIN tblregister r ON c.id = r.tblContractid AND r.status = 1 AND r.tblStageid = ? "
-                + "GROUP BY t.id, t.name, t.nation, t.status "
-                + "HAVING totalPoints > 0 "
+                + "LEFT JOIN ( "
+                + "  SELECT reg.id, RANK() OVER (ORDER BY reg.timedone ASC) as position "
+                + "  FROM tblregister reg "
+                + "  JOIN tblstage st ON reg.tblStageid = st.id "
+                + "  WHERE reg.tblStageid = ? AND reg.laps_completed >= st.total_laps AND reg.timedone IS NOT NULL "
+                + ") ranked ON r.id = ranked.id "
+                + "WHERE sts.totalpoints IS NOT NULL AND sts.totalpoints > 0 "
+                + "GROUP BY t.id, t.name, t.nation, t.status, sts.totalpoints "
                 + "ORDER BY totalPoints DESC";
-        
+
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, stageId);
+            ps.setInt(2, stageId);
+            ps.setInt(3, stageId);
             ResultSet rs = ps.executeQuery();
-            
+
             int rank = 1;
             while (rs.next()) {
                 Map<String, Object> teamRanking = new HashMap<>();
@@ -275,18 +277,19 @@ public class TeamDAO extends DAO {
                 teamRanking.put("teamName", rs.getString("name"));
                 teamRanking.put("nation", rs.getString("nation"));
                 teamRanking.put("racersParticipated", rs.getInt("racersParticipated"));
+                teamRanking.put("bestPosition", rs.getObject("bestPosition"));
                 teamRanking.put("totalPoints", rs.getInt("totalPoints"));
                 teamRanking.put("status", rs.getBoolean("status"));
-                
+
                 rankings.add(teamRanking);
             }
-            
+
             rs.close();
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return rankings;
     }
 
