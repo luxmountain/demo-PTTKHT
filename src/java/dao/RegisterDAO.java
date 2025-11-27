@@ -45,8 +45,8 @@ public class RegisterDAO extends DAO {
                 + "t.id as team_id, t.name as team_name, t.description as team_desc, "
                 + "t.nation as team_nation, t.totalpoints, t.status as team_status, "
                 + "c.salary, c.startdate, c.enddate, c.status as contract_status, "
-                + "s.name as stage_name, s.date as stage_date, s.location, s.description, s.roadmap, s.status as stage_status, s.tblSeasonid, "
-                + "r.laps_completed, r.timedone, r.points "
+                + "s.name as stage_name, s.date as stage_date, s.location, s.description, s.roadmap, s.status as stage_status, s.tblSeasonid, s.total_laps, "
+                + "r.laps_completed, r.timedone "
                 + "FROM tblregister r "
                 + "INNER JOIN tblcontract c ON r.tblContractid = c.id "
                 + "INNER JOIN tblracer ra ON c.tblRacerid = ra.id "
@@ -114,6 +114,7 @@ public class RegisterDAO extends DAO {
                 stage.setRoadmap(rs.getString("roadmap"));
                 stage.setStatus(rs.getBoolean("stage_status"));
                 stage.setSeasonId(rs.getInt("tblSeasonid"));
+                stage.setTotalLaps(rs.getInt("total_laps"));
                 register.setStage(stage);
 
                 // Create and set Result object
@@ -126,11 +127,6 @@ public class RegisterDAO extends DAO {
 
                 Time timedone = rs.getTime("timedone");
                 result.setTimedone(timedone);
-
-                int points = rs.getInt("points");
-                if (!rs.wasNull()) {
-                    result.setPoints(points);
-                }
 
                 register.setResult(result);
                 registers.add(register);
