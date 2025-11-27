@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Contract;
 import model.Racer;
 import model.Register;
@@ -139,5 +141,89 @@ public class RegisterDAO extends DAO {
         }
 
         return registers;
+    }
+
+    /**
+     * Get available racers that are not yet registered for a specific stage
+     * Returns racers with active contracts
+     * 
+     * @param stageId the stage ID
+     * @return list of available racers with contract information
+     */
+    public List<Map<String, Object>> getAvailableRacers(int stageId) {
+        List<Map<String, Object>> availableRacers = new ArrayList<>();
+
+        String sql = "SELECT c.id as contract_id, m.id as racer_id, m.name as racer_name, "
+                + "t.id as team_id, t.name as team_name, ra.nationality, ra.shirtnumber "
+                + "FROM tblcontract c "
+                + "INNER JOIN tblracer ra ON c.tblRacerid = ra.id "
+                + "INNER JOIN tblmember m ON ra.tblMemberid = m.id "
+                + "INNER JOIN tblteam t ON c.tblTeamid = t.id "
+                + "WHERE c.status = 1 AND ra.status = 1 AND t.status = 1 "
+                + "AND c.id NOT IN ( "
+                + "    SELECT tblContractid FROM tblregister WHERE tblStageid = ? "
+                + ") "
+                + "ORDER BY t.name, m.name";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, stageId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> racer = new HashMap<>();
+                racer.put("contractId", rs.getInt("contract_id"));
+                racer.put("racerId", rs.getInt("racer_id"));
+                racer.put("racerName", rs.getString("racer_name"));
+                racer.put("teamId", rs.getInt("team_id"));
+                racer.put("teamName", rs.getString("team_name"));
+                racer.put("nationality", rs.getString("nationality"));
+                racer.put("shirtNumber", rs.getInt("shirtnumber"));
+                
+                availableRacers.add(racer);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return availableRacers;
+    }
+
+    /**
+     * Add a new registration (racer to stage)
+     * 
+     * @param register the Register object containing contract and stage info
+     * @return true if successful, false otherwise
+     */
+    public boolean addRegister(Register register) {
+        String sql = "INSERT INTO tblregister (dateregistered, status, tblContractid, tblStageid) "
+                + "VALUES (?, ?, ?, ?)";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            // Convert java.util.Date to java.sql.Date
+            if (register.getDateRegistered() != null) {
+                ps.setDate(1, new java.sql.Date(register.getDateRegistered().getTime()));
+            } else {
+                ps.setDate(1, new java.sql.Date(System.currentTimeMillis()));
+            }
+            
+            ps.setBoolean(2, register.isStatus());
+            ps.setInt(3, register.getContract().getId());
+            ps.setInt(4, register.getStage().getId());
+            
+            int result = ps.executeUpdate();
+            ps.close();
+            
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

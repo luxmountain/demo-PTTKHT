@@ -33,9 +33,19 @@
 
             <h1>Stage List</h1>
             
+            <div class="button-group" style="margin-bottom: 20px;">
+                <a href="addStage.jsp" class="btn-primary">+ Add New Stage</a>
+            </div>
+            
             <% if (message != null && message.equals("success")) { %>
                 <div class="info-box" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left-color: #28a745;">
                     Results updated successfully!
+                </div>
+            <% } %>
+            
+            <% if (message != null && message.equals("addStageSuccess")) { %>
+                <div class="info-box" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left-color: #28a745;">
+                    New stage added successfully!
                 </div>
             <% } %>
             
@@ -80,7 +90,8 @@
                         <td><span class="badge badge-<%= statusBadge %>"><%= statusText %></span></td>
                         <td><%= stage.getTotalLaps() %></td>
                         <td>
-                            <a href="updateResult.jsp?stageId=<%= stage.getId() %>" class="btn-primary">Update Results</a>
+                            <a href="addRacerToStage.jsp?stageId=<%= stage.getId() %>" class="btn-primary" style="margin-right: 5px; font-size: 12px; padding: 6px 10px;">Add Racers</a>
+                            <a href="updateResult.jsp?stageId=<%= stage.getId() %>" class="btn-primary" style="font-size: 12px; padding: 6px 10px;">Update Results</a>
                         </td>
                     </tr>
                     <% 

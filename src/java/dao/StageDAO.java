@@ -179,4 +179,41 @@ public class StageDAO extends DAO {
 
         return stages;
     }
+
+    /**
+     * Add a new stage to the database
+     * @param stage the Stage object to add
+     * @return true if successful, false otherwise
+     */
+    public boolean addStage(Stage stage) {
+        String sql = "INSERT INTO tblstage (name, date, location, description, roadmap, total_laps, status, tblSeasonid) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, stage.getName());
+            
+            // Convert java.util.Date to java.sql.Date
+            if (stage.getDate() != null) {
+                ps.setDate(2, new java.sql.Date(stage.getDate().getTime()));
+            } else {
+                ps.setNull(2, java.sql.Types.DATE);
+            }
+            
+            ps.setString(3, stage.getLocation());
+            ps.setString(4, stage.getDescription());
+            ps.setString(5, stage.getRoadmap());
+            ps.setInt(6, stage.getTotalLaps());
+            ps.setBoolean(7, stage.isStatus());
+            ps.setInt(8, stage.getSeasonId());
+            
+            int result = ps.executeUpdate();
+            ps.close();
+            
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
