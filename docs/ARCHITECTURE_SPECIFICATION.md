@@ -352,6 +352,66 @@
 
 ---
 
+### 2.8 MemberDAO
+**Lớp thao tác với cơ sở dữ liệu liên quan tới đối tượng Member (tất cả user/admin chung)**
+
+#### Phương thức getMemberById(int memberId)
+- **Tham số truyền vào**: `memberId` (int) - ID của member
+- **Giá trị trả về**: `Member` - đối tượng Member
+- **Chức năng**: Lấy thông tin cơ bản của member từ `tblmember` (username, name, email,...)
+
+#### Phương thức createMember(Member m)
+- **Tham số truyền vào**: `m` (Member) - đối tượng member mới
+- **Giá trị trả về**: `boolean` - true nếu tạo thành công
+- **Chức năng**: Chèn một record mới vào `tblmember` và trả về kết quả
+
+#### Phương thức updateMember(Member m)
+- **Tham số truyền vào**: `m` (Member) - đối tượng member đã sửa
+- **Giá trị trả về**: `boolean` - true nếu cập nhật thành công
+- **Chức năng**: Cập nhật các trường thông tin (name, email, address, phonenumber, dob)
+
+#### Phương thức deleteMember(int memberId)
+- **Tham số truyền vào**: `memberId` (int)
+- **Giá trị trả về**: `boolean` - true nếu xóa thành công
+- **Chức năng**: Đánh dấu `status=false` hoặc xóa vật lý record (tuỳ chính sách dự án)
+
+#### Phương thức checkLogin(String username, String password)
+- **Tham số truyền vào**: `username`, `password`
+- **Giá trị trả về**: `Member` hoặc `null` - Member nếu đăng nhập hợp lệ
+- **Chức năng**: Kiểm tra thông tin đăng nhập, tránh SQL injection (prepared statements), dùng để phân quyền
+
+---
+
+### 2.9 UserDAO
+**Lớp thao tác với phần thông tin chuyên biệt cho người dùng (không phải admin)**
+
+#### Phương thức getUserInfo(int memberId)
+- **Tham số truyền vào**: `memberId` (int)
+- **Giá trị trả về**: `Map<String,Object>` hoặc `User` - thông tin profile user
+- **Chức năng**: Lấy thông tin mở rộng của user (role-specific), ví dụ profile, setting
+
+#### Phương thức updateUserProfile(User u)
+- **Tham số truyền vào**: `u` (User)
+- **Giá trị trả về**: `boolean` - true nếu cập nhật thành công
+- **Chức năng**: Cập nhật các trường thuộc profile người dùng bình thường
+
+---
+
+### 2.10 AdminDAO
+**Lớp thao tác với phần thông tin chuyên biệt cho admin**
+
+#### Phương thức getAdminInfo(int memberId)
+- **Tham số truyền vào**: `memberId` (int)
+- **Giá trị trả về**: `Map<String,Object>` hoặc `Admin` - thông tin admin
+- **Chức năng**: Lấy các thông tin liên quan đến quyền hạn/thiết lập admin, dùng để điều hướng giao diện admin
+
+#### Phương thức listManagedStages(int adminId)
+- **Tham số truyền vào**: `adminId` (int)
+- **Giá trị trả về**: `List<Stage>` - danh sách chặng mà admin được phân quyền quản lý (nếu có)
+- **Chức năng**: Hỗ trợ các tính năng quản lý (nếu dự án có phân quyền chi tiết)
+
+---
+
 ## 3. Tầng Model (Model Classes)
 
 ### 3.1 Member
