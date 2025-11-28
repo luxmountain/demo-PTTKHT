@@ -302,14 +302,14 @@ public class TeamDAO extends DAO {
     public List<Map<String, Object>> getTeamRacersInStage(int teamId, int stageId) {
         List<Map<String, Object>> racers = new ArrayList<>();
         
-        String sql = "SELECT m.id, m.name, r.shirtnumber, "
-                + "reg.laps_completed, reg.timedone, reg.points "
+        String sql = "SELECT m.id, m.name, r.shirtnumber, r.nationality, "
+                + "reg.laps_completed, reg.timedone "
                 + "FROM tblmember m "
                 + "JOIN tblracer r ON m.id = r.tblMemberid "
                 + "JOIN tblcontract c ON r.id = c.tblRacerid "
                 + "JOIN tblregister reg ON c.id = reg.tblContractid "
                 + "WHERE c.tblTeamid = ? AND reg.tblStageid = ? AND reg.status = 1 "
-                + "ORDER BY reg.points DESC, reg.timedone ASC";
+                + "ORDER BY reg.timedone ASC";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -317,20 +317,66 @@ public class TeamDAO extends DAO {
             ps.setInt(2, stageId);
             ResultSet rs = ps.executeQuery();
             
+            List<Map<String, Object>> tempRacers = new ArrayList<>();
             while (rs.next()) {
                 Map<String, Object> racer = new HashMap<>();
                 racer.put("racerId", rs.getInt("id"));
                 racer.put("racerName", rs.getString("name"));
                 racer.put("shirtNumber", rs.getInt("shirtnumber"));
+                racer.put("nationality", rs.getString("nationality"));
                 racer.put("lapsCompleted", rs.getInt("laps_completed"));
                 racer.put("timeDone", rs.getTime("timedone"));
-                racer.put("points", rs.getInt("points"));
                 
-                racers.add(racer);
+                tempRacers.add(racer);
             }
             
             rs.close();
             ps.close();
+            
+            if (!tempRacers.isEmpty()) {
+                String stageSql = "SELECT total_laps FROM tblstage WHERE id = ?";
+                PreparedStatement stagePs = con.prepareStatement(stageSql);
+                stagePs.setInt(1, stageId);
+                ResultSet stageRs = stagePs.executeQuery();
+                
+                stageRs.close();
+                stagePs.close();
+                
+                String positionSql = "SELECT reg.id as regId, c.tblRacerid, "
+                    + "RANK() OVER (ORDER BY reg.timedone ASC) as position "
+                    + "FROM tblregister reg "
+                    + "JOIN tblcontract c ON reg.tblContractid = c.id "
+                    + "JOIN tblstage st ON reg.tblStageid = st.id "
+                    + "WHERE reg.tblStageid = ? AND reg.laps_completed >= st.total_laps AND reg.timedone IS NOT NULL AND reg.status = 1";
+                
+                PreparedStatement posPs = con.prepareStatement(positionSql);
+                posPs.setInt(1, stageId);
+                ResultSet posRs = posPs.executeQuery();
+                
+                Map<Integer, Integer> racerPositions = new HashMap<>();
+                while (posRs.next()) {
+                    racerPositions.put(posRs.getInt("tblRacerid"), posRs.getInt("position"));
+                }
+                posRs.close();
+                posPs.close();
+                
+                // Add position and calculate points based on position
+                for (Map<String, Object> racer : tempRacers) {
+                    Integer racerId = (Integer) racer.get("racerId");
+                    Integer position = racerPositions.get(racerId);
+                    racer.put("position", position != null ? position : 0);
+                    
+                    if (position != null && position > 0) {
+                        int points = Math.max(0, 26 - position);
+                        racer.put("points", points);
+                    } else {
+                        racer.put("points", 0);
+                    }
+                    
+                    racers.add(racer);
+                }
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
