@@ -135,45 +135,6 @@
                     %>
                 </div>
 
-                <div class="section">
-                    <h3>Stage Performance</h3>
-                    <%
-                        if (performances != null && !performances.isEmpty()) {
-                    %>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Stage</th>
-                                    <th>Date</th>
-                                    <th>Best Position</th>
-                                    <th>Points</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%
-                                    for (Map<String, Object> perf : performances) {
-                                        Object bestPos = perf.get("bestPosition");
-                                %>
-                                <tr>
-                                    <td><%= perf.get("stageName") %></td>
-                                    <td><%= sdf.format(perf.get("stageDate")) %></td>
-                                    <td><%= bestPos != null ? bestPos : "Not participated" %></td>
-                                    <td><%= perf.get("totalPoints") %></td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    <%
-                        } else {
-                    %>
-                        <div class="message info">No stage performance data.</div>
-                    <%
-                        }
-                    %>
-                </div>
-
                 <div class="navigation">
                     <a href="teamRanking.jsp?seasonId=<%= seasonId %>" class="btn btn-secondary">Back to Ranking</a>
                     <a href="userHome.jsp" class="btn btn-secondary">Back to Home</a>
