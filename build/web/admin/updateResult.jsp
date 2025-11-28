@@ -5,6 +5,32 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" import="model.*,dao.*,java.util.*,java.text.SimpleDateFormat" %>
+<%
+    Member admin = (Member) session.getAttribute("admin");
+    if (admin == null) {
+        response.sendRedirect("../login.jsp?error=timeout");
+        return;
+    }
+
+    String stageIdStr = request.getParameter("stageId");
+    if (stageIdStr == null || stageIdStr.trim().isEmpty()) {
+        response.sendRedirect("stageList.jsp");
+        return;
+    }
+
+    int stageId = Integer.parseInt(stageIdStr);
+    
+    StageDAO stageDAO = new StageDAO();
+    Stage stage = stageDAO.getStageInfo(stageId);
+    
+    if (stage == null) {
+        response.sendRedirect("stageList.jsp");
+        return;
+    }
+    
+    RegisterDAO registerDAO = new RegisterDAO();
+    List<Register> registers = registerDAO.getRegistersByStage(stageId);
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,64 +39,42 @@
         <link rel="stylesheet" href="../css/style.css">
         <script>
             function validateForm() {
-                var inputs = document.querySelectorAll('input[type="number"], input[type="time"]');
-                var hasData = false;
-                
-                for (var i = 0; i < inputs.length; i++) {
-                    if (inputs[i].value !== '') {
-                        hasData = true;
-                        break;
-                    }
-                }
-                
-                if (!hasData) {
-                    alert('Please enter at least one result!');
+                var rows = document.querySelectorAll('tbody tr');
+
+                if (rows.length === 0) {
+                    alert('No racers to update.');
                     return false;
                 }
-                
-                // Validate that if laps is entered, time should also be entered
-                var rows = document.querySelectorAll('tbody tr');
+
+                var maxLaps = <%= stage.getTotalLaps() %>;
+
                 for (var i = 0; i < rows.length; i++) {
-                    var laps = rows[i].querySelector('input[name^="laps"]').value;
-                    var time = rows[i].querySelector('input[name^="time"]').value;
-                    
-                    if (laps !== '' && time === '') {
-                        alert('Please enter finish time for the racer with ' + laps + ' laps completed');
+                    var lapsInput = rows[i].querySelector('input[name^="laps"]');
+                    var timeInput = rows[i].querySelector('input[name^="time"]');
+
+                    var laps = lapsInput ? lapsInput.value.trim() : '';
+                    var time = timeInput ? timeInput.value.trim() : '';
+
+                    // Require both fields for every row
+                    if (laps === '' || time === '') {
+                        alert('Please fill in both Laps and Finish Time for all racers.');
+                        return false;
+                    }
+
+                    // Validate laps is a number within range
+                    var lapsNum = Number(laps);
+                    if (isNaN(lapsNum) || lapsNum < 0 || lapsNum > maxLaps) {
+                        alert('Laps must be a valid number between 0 and ' + maxLaps + '.');
                         return false;
                     }
                 }
-                
+
                 return confirm('Are you sure you want to save these results?');
             }
         </script>
     </head>
     <body>
         <%
-            Member admin = (Member) session.getAttribute("admin");
-            if (admin == null) {
-                response.sendRedirect("../login.jsp?error=timeout");
-                return;
-            }
-
-            String stageIdStr = request.getParameter("stageId");
-            if (stageIdStr == null || stageIdStr.trim().isEmpty()) {
-                response.sendRedirect("stageList.jsp");
-                return;
-            }
-
-            int stageId = Integer.parseInt(stageIdStr);
-            
-            StageDAO stageDAO = new StageDAO();
-            Stage stage = stageDAO.getStageInfo(stageId);
-            
-            if (stage == null) {
-                response.sendRedirect("stageList.jsp");
-                return;
-            }
-            
-            RegisterDAO registerDAO = new RegisterDAO();
-            List<Register> registers = registerDAO.getRegistersByStage(stageId);
-            
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date today = new Date();
             
